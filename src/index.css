@@ -20,6 +20,8 @@
   --dot: #ffffff;
   --font-display: 'Archivo Black', sans-serif;
   --font-hand: 'La Belle Aurore', cursive;
+  /* สีตัวอักษรหลากสี (ใช้กับ colorful) */
+  --c1: #ffd700; --c2: #4cc9f0; --c3: #ff7aa2; --c4: #7bd88f; --c5: #ff9f43; --c6: #f4f6f8;
 }
 
 :root[data-theme='warm'] {
@@ -40,6 +42,8 @@
   --dot: #3b1f14;
   --font-display: 'Bowlby One', sans-serif;
   --font-hand: 'Caveat', cursive;
+  /* สีตัวอักษรหลากสี (ใช้กับ colorful) */
+  --c1: #d93a50; --c2: #2b3fd6; --c3: #0f9d58; --c4: #f97316; --c5: #ec6fa0; --c6: #1fa2e0;
 }
 
 /* ============ BASE ============ */
@@ -131,8 +135,10 @@ h1.title { font-size: clamp(28px, 3.6vw, 46px); color: var(--accent); }
 .cube div:nth-child(5) { transform: rotateX(90deg) translateZ(90px); }
 .cube div:nth-child(6) { transform: rotateX(-90deg) translateZ(90px); }
 @keyframes spin {
-  from { transform: rotateX(0deg) rotateY(0deg); }
-  to   { transform: rotateX(360deg) rotateY(360deg); }
+  0%   { transform: rotateX(-20deg) rotateY(0deg); }
+  33%  { transform: rotateX(70deg)  rotateY(120deg); }
+  66%  { transform: rotateX(-60deg) rotateY(240deg); }
+  100% { transform: rotateX(-20deg) rotateY(360deg); }
 }
 
 /* ============ PACMAN LOADER ============ */
@@ -182,4 +188,8 @@ textarea { min-height: 170px; resize: vertical; }
   main { margin-left: 0; padding: 0 7vw 84px; }
   .hero, .about, .contact-page, form { grid-template-columns: 1fr; }
   .logo { order: -1; max-width: 260px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cube { animation: none; transform: rotateX(-24deg) rotateY(-30deg); }
 }

@@ -8,7 +8,7 @@ export default function About() {
       <div>
         <span className="tag">&lt;h1&gt;</span>
         <h1 className="title">
-          <AnimatedLetters text="About me" />
+          <AnimatedLetters text="About me" colorful />
         </h1>
         <span className="tag">&lt;/h1&gt;</span>
 
