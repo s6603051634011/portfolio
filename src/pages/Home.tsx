@@ -11,7 +11,7 @@ export default function Home() {
           <AnimatedLetters text="Hi," />
           <br />
           <AnimatedLetters text="I’m " />
-          <AnimatedLetters text="Phimlaphat" className="yellow" />
+          <AnimatedLetters text="Phimlaphat" className="accent" />
           <br />
           <AnimatedLetters text="developer." className="sub" />
         </h1>

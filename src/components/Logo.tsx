@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 
-// วาดเส้นขอบของตัว P ทีละน้อย แล้วค่อยเติมสีเหลืองเข้าไป
+// วาดเส้นขอบของตัว P ทีละน้อย แล้วค่อยเติมสีเข้าไป (สีมาจาก CSS: .logo path)
 export default function Logo() {
   const path = useRef<SVGPathElement>(null)
 
@@ -21,8 +21,6 @@ export default function Logo() {
       <path
         ref={path}
         d="M28 108 V12 H68 A28 28 0 0 1 68 68 H50 V108 Z"
-        fill="#ffd700"
-        stroke="#ffd700"
         strokeWidth="2"
         strokeLinejoin="round"
       />
