@@ -1,13 +1,14 @@
 import AnimatedLetters from '../components/AnimatedLetters'
 import { COURT_LIVE, COURT_REPO } from '../links'
 
-type Shot = { src: string; alt: string; caption: string }
+type Shot = { src: string; alt: string; caption: string; ratio?: string }
 type Project = {
   title: string
   blurb: string
   points: string[]
   tech: string[]
   shots?: Shot[]
+  twoCols?: boolean // แกลเลอรี 2 ช่อง (ภาพกว้าง + ภาพสูง)
   repo?: string
   live?: string
 }
@@ -37,11 +38,18 @@ const projects: Project[] = [
     title: 'Thai Tax Invoice OCR (Senior Thesis)',
     blurb: 'A two-person thesis project: extracting structured data from Thai tax invoices.',
     points: [
-      'Python pipeline built around Qwen2.5-VL and Typhoon-OCR.',
+      'A web app : photograph or pick an invoice, upload it, and the server reads it through a GPU queue.',
+      'Typhoon-OCR 1.5 (2B) fine-tuned with QLoRA answers 14 invoice fields and returns them as JSON.',
+      'Rule checks (tax ID checksum, amount arithmetic) flag fields for human review before anything is saved.',
       'Designed to run on-premise, for data privacy and to avoid external API costs.',
       'Handles hard cases such as quantity and unit price embedded in the description field.',
     ],
-    tech: ['Python', 'Qwen2.5-VL', 'Typhoon-OCR'],
+    tech: ['Python', 'Typhoon-OCR 1.5 (2B)', 'QLoRA'],
+    twoCols: true,
+    shots: [
+      { src: '/projects/ocr-compare.jpg', ratio: '16 / 9', alt: 'Photo of a tax invoice next to the extracted JSON; company names, addresses and tax IDs are blurred', caption: 'Invoice photo to extracted JSON (identifiers blurred)' },
+      { src: '/projects/ocr-pipeline.png', ratio: '2 / 3', alt: 'Pipeline: upload, resize, GPU queue, auto-rotate, Typhoon OCR, JSON check, validation, user review, save', caption: 'System flow (click to enlarge)' },
+    ],
   },
 ]
 
@@ -70,10 +78,17 @@ export default function Projects() {
               ))}
             </div>
             {p.shots && (
-              <div className="shots">
+              <div className={`shots ${p.twoCols ? 'two' : ''}`}>
                 {p.shots.map((s) => (
                   <figure key={s.src}>
-                    <img src={s.src} alt={s.alt} loading="lazy" />
+                    <a href={s.src} target="_blank" rel="noreferrer">
+                      <img
+                        src={s.src}
+                        alt={s.alt}
+                        loading="lazy"
+                        style={s.ratio ? { aspectRatio: s.ratio } : undefined}
+                      />
+                    </a>
                     <figcaption>{s.caption}</figcaption>
                   </figure>
                 ))}

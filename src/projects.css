@@ -37,3 +37,7 @@
 @media (max-width: 820px) {
   .proj { padding: 20px; }
 }
+
+.shots a { display: block; }
+.shots.two { grid-template-columns: 1.7fr 1fr; align-items: start; }
+@media (max-width: 820px) { .shots.two { grid-template-columns: 1fr; } }
