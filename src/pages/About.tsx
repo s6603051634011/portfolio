@@ -19,8 +19,16 @@ export default function About() {
         </p>
         <p>
           I build software in Python and TypeScript, mostly with Next.js and Firebase.
-          My senior thesis is an on-premise OCR pipeline that extracts data from Thai tax
-          invoices, and I worked with a team of seven on a{' '}
+          My senior thesis is an{' '}
+          <HoverPreview
+            to="/projects"
+            title="Thai tax invoice OCR"
+            desc="Senior thesis: Typhoon-OCR + QLoRA, running on-premise. Click to see the project."
+            image="/projects/ocr-compare.jpg"
+          >
+            on-premise OCR pipeline
+          </HoverPreview>{' '}
+          that extracts data from Thai tax invoices, and I worked with a team of seven on a{' '}
           <HoverPreview
             to="/projects"
             title="Sports court booking app"
