@@ -13,10 +13,10 @@ export default function Home() {
           <AnimatedLetters text="I’m " />
           <AnimatedLetters text="Phimlaphat" className="accent" colorful />
           <br />
-          <AnimatedLetters text="developer." className="sub" />
+          <AnimatedLetters text="Machaopasuwan." className="sub" />
         </h1>
         <p className="role">
-          Computer Engineering student / Cybersecurity intern candidate / Full-stack developer
+          Computer Engineering student / Network security intern /<br/> Full-stack developer
         </p>
         <Link to="/contact" className="btn">CONTACT ME</Link>
       </div>

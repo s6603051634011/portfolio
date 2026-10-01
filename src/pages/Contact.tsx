@@ -39,7 +39,7 @@ export default function Contact() {
         </h1>
         <span className="tag">&lt;/h1&gt;</span>
         <p>
-          I’m open to internship opportunities in cybersecurity. Send a message and I’ll
+          I’m open to internship opportunities in Network Security. Send a message and I’ll
           reply as soon as I can.
         </p>
 

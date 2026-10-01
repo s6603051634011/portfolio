@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Sidebar from './components/Sidebar'
+import Navbar from './components/Navbar'
 import Loader from './components/Loader'
 import Home from './pages/Home'
 import About from './pages/About'
@@ -20,7 +20,7 @@ export default function App() {
   return (
     <>
       {loading && <Loader />}
-      <Sidebar />
+      <Navbar />
       <main>
         <span className="tag top">&lt;body&gt;</span>
         {!loading && (
