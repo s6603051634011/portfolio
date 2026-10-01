@@ -4,13 +4,13 @@
 .orbit { position: relative; width: 100%; aspect-ratio: 1; }
 .orbit .ring { position: absolute; inset: 10%; border: 1px solid var(--line); border-radius: 50%; opacity: .7; }
 .orbit .ring.inner { inset: 33%; opacity: .35; }
-.core {
+.orb {
   position: absolute; left: 50%; top: 50%; width: 15%; aspect-ratio: 1; border-radius: 50%;
   transform: translate(-50%, -50%);
   background: linear-gradient(135deg, var(--accent), var(--accent-shadow));
   animation: pulse 3.5s ease-in-out infinite;
 }
-.core::after { content: ''; position: absolute; inset: 28%; border-radius: 50%; background: var(--bg); }
+.orb::after { content: ''; position: absolute; inset: 28%; border-radius: 50%; background: var(--bg); }
 @keyframes pulse { 50% { transform: translate(-50%, -50%) scale(1.1); } }
 
 .rotor { position: absolute; inset: 0; }
@@ -18,8 +18,7 @@
 .unspin { animation: orbit-unspin 120s linear infinite; }
 @keyframes orbit-spin { to { transform: rotate(360deg); } }
 @keyframes orbit-unspin { to { transform: rotate(-360deg); } }
-/* หยุดหมุนตอนเมาส์อยู่บนวง หรือมีโหนดที่เลือกอยู่ */
-.orbit:hover .spin, .orbit:hover .unspin,
+/* หยุดหมุนตอนมีการ์ดแสดงอยู่ (ชี้หรือเลือกทักษะ) */
 .orbit.has-sel .spin, .orbit.has-sel .unspin { animation-play-state: paused; }
 
 .slot {
@@ -49,7 +48,7 @@
 }
 .sk-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .sk-badge { font-size: 10px; letter-spacing: .16em; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 3px 10px; }
-.sk-badge.learning { border-color: var(--tag); color: var(--tag); }
+.sk-badge.st-learning { border-color: var(--tag); color: var(--tag); }
 .sk-close { background: none; border: 0; color: var(--muted); font-size: 18px; cursor: pointer; line-height: 1; }
 .sk-card h2 { font-family: var(--font-display); font-weight: 400; font-size: 20px; margin: 0 0 8px; }
 .sk-card p { margin: 0 0 14px; font-size: 14px; line-height: 1.6; }
@@ -66,5 +65,5 @@
   .sk-card { position: static; transform: none; width: 100%; margin-top: 24px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .spin, .unspin, .core { animation: none; }
+  .orb { animation: none; } /* วงหมุนช้ามากและหยุดได้เอง จึงไม่ปิดการหมุน */
 }

@@ -44,7 +44,7 @@ const projects: Project[] = [
       'Designed to run on-premise, for data privacy and to avoid external API costs.',
       'Handles hard cases such as quantity and unit price embedded in the description field.',
     ],
-    tech: ['Python', 'Typhoon-OCR 1.5', 'QLoRA', 'Qwen2.5-VL'],
+    tech: ['Python', 'Typhoon-OCR 1.5', 'QLoRA'],
     twoCols: true,
     shots: [
       { src: '/projects/ocr-compare.jpg', ratio: '16 / 9', alt: 'Photo of a tax invoice next to the extracted JSON; company names, addresses and tax IDs are blurred', caption: 'Invoice photo to extracted JSON (identifiers blurred)' },

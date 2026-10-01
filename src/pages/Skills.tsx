@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import AnimatedLetters from '../components/AnimatedLetters'
 import '../skills.css'
 
@@ -37,13 +37,35 @@ const skills: Skill[] = [
 ]
 
 export default function Skills() {
-  const [sel, setSel] = useState<string | null>(null)
-  const current = skills.find((s) => s.id === sel)
+  const [pinned, setPinned] = useState<string | null>(null) // ทักษะที่กดค้างไว้
+  const [hover, setHover] = useState<string | null>(null) // ทักษะที่กำลังชี้
+  const timer = useRef<number | undefined>(undefined)
+
+  const shownId = hover ?? pinned
+  const current = skills.find((s) => s.id === shownId)
+
+  const enter = (id: string) => {
+    window.clearTimeout(timer.current)
+    setHover(id)
+  }
+  // หน่วงนิดหน่อยให้เมาส์เลื่อนจากโหนดไปที่การ์ดได้
+  const leave = () => {
+    window.clearTimeout(timer.current)
+    timer.current = window.setTimeout(() => setHover(null), 400)
+  }
+  const clearAll = () => {
+    window.clearTimeout(timer.current)
+    setHover(null)
+    setPinned(null)
+  }
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setSel(null)
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && clearAll()
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      window.clearTimeout(timer.current)
+    }
   }, [])
 
   return (
@@ -51,13 +73,13 @@ export default function Skills() {
       <h1 className="title">
         <AnimatedLetters text="Skills" />
       </h1>
-      <p className="sk-sub">Click a node to see how I use it. The orbit pauses while you look.</p>
+      <p className="sk-sub">Hover a skill to see how I use it. Click to keep it open.</p>
 
       <div className="sk-stage">
-        <div className={`orbit ${sel ? 'has-sel' : ''}`} onClick={() => setSel(null)}>
+        <div className={`orbit ${current ? 'has-sel' : ''}`} onClick={clearAll}>
           <div className="ring" />
           <div className="ring inner" />
-          <div className="core" />
+          <div className="orb" />
           <div className="rotor spin">
             {skills.map((s, i) => (
               <div
@@ -68,12 +90,16 @@ export default function Skills() {
                 <div className="unspin">
                   <button
                     type="button"
-                    className={`node ${sel === s.id ? 'active' : ''}`}
-                    aria-pressed={sel === s.id}
+                    className={`node ${shownId === s.id ? 'active' : ''}`}
+                    aria-pressed={pinned === s.id}
                     aria-label={s.name}
+                    onMouseEnter={() => enter(s.id)}
+                    onMouseLeave={leave}
+                    onFocus={() => enter(s.id)}
+                    onBlur={leave}
                     onClick={(e) => {
                       e.stopPropagation()
-                      setSel(sel === s.id ? null : s.id)
+                      setPinned(pinned === s.id ? null : s.id)
                     }}
                   >
                     {s.short}
@@ -86,17 +112,30 @@ export default function Skills() {
         </div>
 
         {current && (
-          <div className="sk-card" role="region" aria-label={current.name}>
+          <div
+            className="sk-card"
+            role="region"
+            aria-label={current.name}
+            onMouseEnter={() => window.clearTimeout(timer.current)}
+            onMouseLeave={leave}
+          >
             <div className="sk-top">
-              <span className={`sk-badge ${current.status}`}>{current.status.toUpperCase()}</span>
-              <button type="button" className="sk-close" aria-label="Close" onClick={() => setSel(null)}>×</button>
+              <span className={`sk-badge st-${current.status}`}>{current.status.toUpperCase()}</span>
+              <button type="button" className="sk-close" aria-label="Close" onClick={clearAll}>×</button>
             </div>
             <h2>{current.name}</h2>
             <p>{current.text}</p>
             <p className="sk-links-title">CONNECTED SKILLS</p>
             <div className="sk-chips">
               {current.links.map((id) => (
-                <button type="button" key={id} onClick={() => setSel(id)}>
+                <button
+                  type="button"
+                  key={id}
+                  onClick={() => {
+                    setPinned(id)
+                    setHover(id)
+                  }}
+                >
                   {skills.find((s) => s.id === id)?.name} →
                 </button>
               ))}
