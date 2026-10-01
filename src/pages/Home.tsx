@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import AnimatedLetters from '../components/AnimatedLetters'
-import Logo from '../components/Logo'
+import Mascot from '../components/Mascot'
 
 export default function Home() {
   return (
@@ -15,11 +15,11 @@ export default function Home() {
           <AnimatedLetters text="developer." className="sub" />
         </h1>
         <p className="role">
-          Computer Engineering student / Network Security intern / <br/>Full-stack developer
+          Computer Engineering student / Cybersecurity intern candidate / Full-stack developer
         </p>
         <Link to="/contact" className="btn">CONTACT ME</Link>
       </div>
-      <Logo />
+      <Mascot />
     </section>
   )
 }
