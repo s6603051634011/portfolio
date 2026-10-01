@@ -5,6 +5,7 @@ const links = [
   { to: '/', label: 'Home', icon: '⌂' },
   { to: '/about', label: 'About', icon: '☺' },
   { to: '/projects', label: 'Projects', icon: '▦' },
+  { to: '/education', label: 'Education', icon: '✦' },
   { to: '/contact', label: 'Contact', icon: '✉' },
 ]
 
