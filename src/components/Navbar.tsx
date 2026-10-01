@@ -5,6 +5,7 @@ import { GITHUB } from '../links'
 const links = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
+  { to: '/skills', label: 'Skills' },
   { to: '/projects', label: 'Projects' },
   { to: '/education', label: 'Education' },
   { to: '/contact', label: 'Contact', mobileOnly: true }, // บนจอใหญ่ใช้ปุ่ม Contact ด้านขวาแทน
