@@ -1,8 +1,10 @@
 import { NavLink } from 'react-router-dom'
+import { GITHUB } from '../links'
 
 const links = [
   { to: '/', label: 'Home', icon: '⌂' },
   { to: '/about', label: 'About', icon: '☺' },
+  { to: '/projects', label: 'Projects', icon: '▦' },
   { to: '/contact', label: 'Contact', icon: '✉' },
 ]
 
@@ -21,8 +23,9 @@ export default function Sidebar() {
         ))}
       </nav>
       <div className="soc">
-        <a href="https://github.com/" target="_blank" rel="noreferrer">GH</a>
-        <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">in</a>
+        {GITHUB && (
+          <a href={GITHUB} target="_blank" rel="noreferrer" aria-label="GitHub">GH</a>
+        )}
       </div>
     </aside>
   )

@@ -1,4 +1,5 @@
 import AnimatedLetters from '../components/AnimatedLetters'
+import HoverPreview from '../components/HoverPreview'
 
 const faces = ['Python', 'TypeScript', 'Next.js', 'Firebase', 'OCR', 'Security']
 
@@ -19,7 +20,16 @@ export default function About() {
         <p>
           I build software in Python and TypeScript, mostly with Next.js and Firebase.
           My senior thesis is an on-premise OCR pipeline that extracts data from Thai tax
-          invoices, and I built a sports court booking web app end to end.
+          invoices, and I worked with a team of seven on a{' '}
+          <HoverPreview
+            to="/projects"
+            title="Sports court booking app"
+            desc="Next.js + Firebase, team of 7. Click to see the project."
+            image="/projects/booking-form.png"
+          >
+            sports court booking web app
+          </HoverPreview>
+          .
         </p>
         <p>
           I’m learning security from the ground up: how systems break, and how to build

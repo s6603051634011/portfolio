@@ -1,0 +1,39 @@
+/* Hover preview (ข้อความที่ชี้แล้วมีการ์ดเด้ง) */
+.hp { position: relative; display: inline; }
+.hp-link {
+  color: var(--text); font-weight: 700; text-decoration: none; cursor: pointer;
+  border-bottom: 2px solid var(--accent); transition: color .2s;
+}
+.hp-link:hover, .hp-link:focus-visible { color: var(--accent); outline: none; }
+.hp-card {
+  position: absolute; left: 0; bottom: calc(100% + 12px);
+  width: min(280px, 80vw); padding: 10px; border-radius: 12px;
+  background: var(--surface); color: var(--surface-text);
+  border: 2px solid var(--line); box-shadow: 6px 6px 0 var(--accent-shadow);
+  display: flex; flex-direction: column; gap: 4px;
+  font-size: 13px; line-height: 1.4; text-align: left;
+  opacity: 0; visibility: hidden; transform: translateY(6px);
+  transition: opacity .2s, transform .2s, visibility .2s;
+  pointer-events: none; z-index: 10;
+}
+.hp-card img { width: 100%; aspect-ratio: 3 / 2; object-fit: contain; background: var(--bg); border-radius: 8px; margin-bottom: 4px; }
+.hp-card strong { font-size: 14px; }
+.hp:hover .hp-card, .hp:focus-within .hp-card { opacity: 1; visibility: visible; transform: none; }
+
+/* Projects page */
+.proj-list { display: grid; gap: 28px; margin-top: 28px; max-width: 980px; }
+.proj { border: 2px solid var(--line); border-radius: 16px; padding: 28px; }
+.proj h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(22px, 2.6vw, 32px); color: var(--accent); margin: 0 0 8px; }
+.proj-blurb { color: var(--text); margin: 0 0 14px; }
+.proj ul { margin: 0 0 18px; padding-left: 20px; color: var(--text-soft); font-size: 15px; line-height: 1.7; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.chips span { border: 1px solid var(--accent); color: var(--text); border-radius: 999px; padding: 4px 12px; font-size: 12px; }
+.shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.shots figure { margin: 0; }
+.shots img { width: 100%; aspect-ratio: 3 / 2; object-fit: contain; background: var(--surface); border: 2px solid var(--line); border-radius: 10px; }
+.shots figcaption { color: var(--muted); font-size: 12px; margin-top: 6px; }
+.proj-links { display: flex; gap: 12px; }
+
+@media (max-width: 820px) {
+  .proj { padding: 20px; }
+}
