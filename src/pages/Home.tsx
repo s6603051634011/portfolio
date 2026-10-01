@@ -6,17 +6,16 @@ export default function Home() {
   return (
     <section className="page hero">
       <div>
-        <span className="tag">&lt;h1&gt;</span>
         <h1>
           <AnimatedLetters text="Hi," />
           <br />
           <AnimatedLetters text="I’m " />
           <AnimatedLetters text="Phimlaphat" className="accent" colorful />
           <br />
-          <AnimatedLetters text="Machaopasuwan." className="sub" />
+          <AnimatedLetters text="developer." className="sub" />
         </h1>
         <p className="role">
-          Computer Engineering student / Network security intern /<br/> Full-stack developer
+          Computer Engineering student / Network Security intern / <br/>Full-stack developer
         </p>
         <Link to="/contact" className="btn">CONTACT ME</Link>
       </div>

@@ -1,7 +1,11 @@
 /* แถบเมนูลอยด้านบน (แทน sidebar) ไฟล์นี้ทับกฎเก่าใน index.css */
 main { margin-left: 0; padding: 0 6vw; }
+/* จัดเนื้อหาทุกหน้าให้อยู่กลางจอ กว้างเท่าแถบเมนู (1100px)
+   อยากให้หน้าไหนเต็มกว้างเหมือนเดิม ลบสองบรรทัดนี้ได้ */
+.page { width: min(1100px, 100%); margin-inline: auto; }
+.proj-list { max-width: none; }
+.about h1.title { margin-bottom: 28px; }
 .page { padding-top: max(14vh, 120px); }
-.tag.top { top: 100px; }
 .map { isolation: isolate; } /* กันแผนที่ลอยทับแถบเมนูตอนเลื่อนหน้า */
 .loader { z-index: 100; }
 

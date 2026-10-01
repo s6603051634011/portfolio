@@ -7,11 +7,9 @@ export default function About() {
   return (
     <section className="page about">
       <div>
-        <span className="tag">&lt;h1&gt;</span>
         <h1 className="title">
           <AnimatedLetters text="About me" colorful />
         </h1>
-        <span className="tag">&lt;/h1&gt;</span>
 
         <p>
           I’m a 4th-year Electronics and Computer Engineering student at KMUTNB,

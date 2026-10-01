@@ -22,7 +22,6 @@ export default function App() {
       {loading && <Loader />}
       <Navbar />
       <main>
-        <span className="tag top">&lt;body&gt;</span>
         {!loading && (
           <Routes>
             <Route path="/" element={<Home />} />
@@ -32,7 +31,6 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
           </Routes>
         )}
-        <span className="tag bottom">&lt;/body&gt;</span>
       </main>
     </>
   )

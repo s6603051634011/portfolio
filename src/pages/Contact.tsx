@@ -33,11 +33,9 @@ export default function Contact() {
   return (
     <section className="page contact-page">
       <div className="contact">
-        <span className="tag">&lt;h1&gt;</span>
         <h1 className="title">
           <AnimatedLetters text="Contact me" />
         </h1>
-        <span className="tag">&lt;/h1&gt;</span>
         <p>
           I’m open to internship opportunities in Network Security. Send a message and I’ll
           reply as soon as I can.

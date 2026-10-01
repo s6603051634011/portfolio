@@ -16,7 +16,7 @@ const experience: Item[] = [
     title: 'Senior Thesis: Thai Tax Invoice OCR',
     place: 'KMUTNB · two-person thesis',
     status: 'present', // เปลี่ยนเป็น 'completed' เมื่อเสร็จแล้ว
-    text: 'Building a Python pipeline with Typhoon-OCR 1.5 2B that extracts structured data from Thai tax invoices, designed to run on-premise.',
+    text: 'Building a Python pipeline with Typhoon-OCR 1.5 (2B) that extracts structured data from Thai tax invoices, designed to run on-premise.',
   },
   {
     title: 'Sports Court Booking Web App',
@@ -28,10 +28,10 @@ const experience: Item[] = [
 
 const education: Item[] = [
   {
-    title: 'Electronics and Computer Engineering',
+    title: 'Electronics Engineering Technology (Computer)',
     place: "King Mongkut's University of Technology North Bangkok (KMUTNB), College of Industrial Technology",
     status: 'present',
-    period: 'Computer Engineering specialization · 4th year',
+    period: 'Electronics Engineering Technology (Computer) · 4th year',
     text: 'Specializing in Computer Engineering, with hands-on software projects and a focus on cybersecurity.',
   },
   {
@@ -86,12 +86,10 @@ function Column({ label, icon, items }: { label: string; icon: ReactNode; items:
 export default function Education() {
   return (
     <section className="page">
-      <span className="tag">&lt;h1&gt;</span>
       <h1 className="bg-title">
         <AnimatedLetters text="Education & " />
         <AnimatedLetters text="Experience." className="accent" />
       </h1>
-      <span className="tag">&lt;/h1&gt;</span>
       <p className="bg-sub">A journey of learning and building.</p>
 
       <div className="bg-grid">

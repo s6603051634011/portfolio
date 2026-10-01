@@ -38,13 +38,13 @@ const projects: Project[] = [
     title: 'Thai Tax Invoice OCR (Senior Thesis)',
     blurb: 'A two-person thesis project: extracting structured data from Thai tax invoices.',
     points: [
-      'A web app : photograph or pick an invoice, upload it, and the server reads it through a GPU queue.',
+      'A web app for phones: photograph or pick an invoice, upload it, and the server reads it through a GPU queue.',
       'Typhoon-OCR 1.5 (2B) fine-tuned with QLoRA answers 14 invoice fields and returns them as JSON.',
       'Rule checks (tax ID checksum, amount arithmetic) flag fields for human review before anything is saved.',
       'Designed to run on-premise, for data privacy and to avoid external API costs.',
       'Handles hard cases such as quantity and unit price embedded in the description field.',
     ],
-    tech: ['Python', 'Typhoon-OCR 1.5 (2B)', 'QLoRA'],
+    tech: ['Python', 'Typhoon-OCR 1.5', 'QLoRA', 'Qwen2.5-VL'],
     twoCols: true,
     shots: [
       { src: '/projects/ocr-compare.jpg', ratio: '16 / 9', alt: 'Photo of a tax invoice next to the extracted JSON; company names, addresses and tax IDs are blurred', caption: 'Invoice photo to extracted JSON (identifiers blurred)' },
@@ -56,11 +56,9 @@ const projects: Project[] = [
 export default function Projects() {
   return (
     <section className="page">
-      <span className="tag">&lt;h1&gt;</span>
       <h1 className="title">
         <AnimatedLetters text="Projects" />
       </h1>
-      <span className="tag">&lt;/h1&gt;</span>
 
       <div className="proj-list">
         {projects.map((p) => (
