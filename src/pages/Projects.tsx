@@ -61,6 +61,9 @@ const projects: Project[] = [
       'Streamlit dashboard with quick-monitor and quick-config buttons.',
     ],
     tech: ['Python', 'Streamlit', 'Ollama', 'llama3.2:3b', 'Paramiko (SSH)', 'Function calling'],
+    shots: [
+      { src: '/projects/noc-ui.jpg', ratio: '1917 / 868', alt: 'NOC Assistant dashboard with quick-monitor and quick-config buttons in the sidebar and a chat input', caption: 'NOC Assistant dashboard (Streamlit)' },
+    ],
   },
 ]
 
