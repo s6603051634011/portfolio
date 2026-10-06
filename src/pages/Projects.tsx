@@ -1,4 +1,5 @@
 import AnimatedLetters from '../components/AnimatedLetters'
+import PhoneCarousel from '../components/PhoneCarousel'
 import { COURT_LIVE, COURT_REPO } from '../links'
 
 type Shot = { src: string; alt: string; caption: string; ratio?: string }
@@ -9,6 +10,7 @@ type Project = {
   tech: string[]
   shots?: Shot[]
   twoCols?: boolean // แกลเลอรี 2 ช่อง (ภาพกว้าง + ภาพสูง)
+  carousel?: boolean // ภาพหน้าจอมือถือแบบสไลด์
   repo?: string
   live?: string
 }
@@ -65,6 +67,23 @@ const projects: Project[] = [
       { src: '/projects/noc-ui.jpg', ratio: '1917 / 868', alt: 'NOC Assistant dashboard with quick-monitor and quick-config buttons in the sidebar and a chat input', caption: 'NOC Assistant dashboard (Streamlit)' },
     ],
   },
+  {
+    title: 'MyMood (Mobile App)',
+    blurb: 'A mobile app for tracking daily habits, moods and journal entries.',
+    points: [
+      'Daily habit checklist with a weekly strip of puzzle pieces and a counter of finished habits (4/9 in the screenshot).',
+      'Monthly mood calendar where each day is a puzzle piece showing that day’s mood, with a count for each of the four moods.',
+      'Journal with a mood emoji, timestamps, search by text or #tags, and delete.',
+      'Bottom navigation bar with a quick-add button.',
+    ],
+    tech: ['Flutter', 'Dart'],
+    carousel: true,
+    shots: [
+      { src: '/projects/mymood-home.png', alt: 'MyMood home screen: weekly puzzle-piece strip and a habit checklist with 4 of 9 done', caption: 'Daily habits' },
+      { src: '/projects/mymood-calendar.png', alt: 'Mood calendar for October 2026 with puzzle-piece days and mood counts', caption: 'Mood calendar' },
+      { src: '/projects/mymood-journal.png', alt: 'Journal screen with a search bar and one entry', caption: 'Journal' },
+    ],
+  },
 ]
 
 export default function Projects() {
@@ -89,7 +108,8 @@ export default function Projects() {
                 <span key={t}>{t}</span>
               ))}
             </div>
-            {p.shots && (
+            {p.shots && p.carousel && <PhoneCarousel slides={p.shots} />}
+            {p.shots && !p.carousel && (
               <div className={`shots ${p.twoCols ? 'two' : ''}`}>
                 {p.shots.map((s) => (
                   <figure key={s.src}>

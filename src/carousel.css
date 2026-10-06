@@ -1,0 +1,24 @@
+/* สไลด์ภาพหน้าจอมือถือ: เลื่อนทีละภาพได้ (ปัด, ปุ่ม, หรือ scroll) */
+.pc { margin-bottom: 20px; }
+.pc-track {
+  display: flex; gap: 16px; width: fit-content; max-width: 100%; margin-inline: auto;
+  overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 8px 14px; scrollbar-width: thin;
+}
+.pc-track:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 12px; }
+.pc-slide { flex: 0 0 auto; width: min(260px, 72vw); margin: 0; scroll-snap-align: start; }
+.pc-slide img {
+  display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover; object-position: top;
+  background: var(--surface); border: 3px solid var(--line); border-radius: 28px;
+  box-shadow: 5px 5px 0 var(--accent-shadow);
+}
+.pc-slide figcaption { color: var(--muted); font-size: 12px; text-align: center; margin-top: 10px; }
+.pc-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 4px; }
+.pc-btn {
+  width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 18px;
+  background: none; color: var(--text); border: 2px solid var(--line);
+}
+.pc-btn:hover:not(:disabled), .pc-btn:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+.pc-btn:disabled { opacity: .35; cursor: default; }
+.pc-dots { display: flex; gap: 8px; }
+.pc-dot { width: 10px; height: 10px; padding: 0; border-radius: 50%; border: 2px solid var(--line); background: none; cursor: pointer; }
+.pc-dot.on { background: var(--accent); border-color: var(--accent); }
