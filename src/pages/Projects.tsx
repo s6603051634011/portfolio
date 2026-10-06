@@ -44,12 +44,23 @@ const projects: Project[] = [
       'Designed to run on-premise, for data privacy and to avoid external API costs.',
       'Handles hard cases such as quantity and unit price embedded in the description field.',
     ],
-    tech: ['Python', 'Typhoon-OCR 1.5', 'QLoRA'],
+    tech: ['Python', 'Typhoon-OCR 1.5', 'QLoRA', 'Qwen2.5-VL'],
     twoCols: true,
     shots: [
       { src: '/projects/ocr-compare.jpg', ratio: '16 / 9', alt: 'Photo of a tax invoice next to the extracted JSON; company names, addresses and tax IDs are blurred', caption: 'Invoice photo to extracted JSON (identifiers blurred)' },
       { src: '/projects/ocr-pipeline.png', ratio: '2 / 3', alt: 'Pipeline: upload, resize, GPU queue, auto-rotate, Typhoon OCR, JSON check, validation, user review, save', caption: 'System flow (click to enlarge)' },
     ],
+  },
+  {
+    title: 'NOC Assistant (AI Network Chatbot)',
+    blurb: 'A chatbot for monitoring and configuring a Linux server in plain Thai, powered by a local LLM.',
+    points: [
+      'Ask a question in Thai and the model calls tools over SSH to fetch real CPU, memory, disk, interface, route and connection data, then explains the result in everyday language.',
+      'Runs llama3.2:3b locally through Ollama with function calling, so server data stays on the local network.',
+      'Config changes such as adding an IP address are held until the user confirms; read-only questions run straight away.',
+      'Streamlit dashboard with quick-monitor and quick-config buttons.',
+    ],
+    tech: ['Python', 'Streamlit', 'Ollama', 'llama3.2:3b', 'Paramiko (SSH)', 'Function calling'],
   },
 ]
 
