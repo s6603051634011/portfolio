@@ -11,6 +11,7 @@ type Project = {
   shots?: Shot[]
   twoCols?: boolean // แกลเลอรี 2 ช่อง (ภาพกว้าง + ภาพสูง)
   carousel?: boolean // ภาพหน้าจอมือถือแบบสไลด์
+  narrow?: boolean // มีภาพเดียวและไม่ต้องกว้างเต็มการ์ด
   repo?: string
   live?: string
 }
@@ -84,6 +85,19 @@ const projects: Project[] = [
       { src: '/projects/mymood-journal.png', alt: 'Journal screen with a search bar and one entry', caption: 'Journal' },
     ],
   },
+  {
+    title: 'DIY Power Supply (Electronic Practice I)',
+    blurb: 'A power supply I built by hand on my own for the Electronic Practice I course.',
+    points: [
+      'Built and wired the whole unit myself: circuit boards, transformer, heatsinks and output terminals.',
+      'Housing is a ready-made metal box that I drilled to fit a front panel with banana-jack terminals, switches and indicator lights.',
+    ],
+    tech: ['Hardware', 'Analog electronics'],
+    narrow: true,
+    shots: [
+      { src: '/projects/power-supply.jpg', ratio: '720 / 760', alt: 'Inside the power supply: a transformer, circuit boards with ICs and heatsinks', caption: 'Inside the enclosure: transformer, circuit boards and heatsinks' },
+    ],
+  },
 ]
 
 export default function Projects() {
@@ -110,7 +124,10 @@ export default function Projects() {
             </div>
             {p.shots && p.carousel && <PhoneCarousel slides={p.shots} />}
             {p.shots && !p.carousel && (
-              <div className={`shots ${p.twoCols ? 'two' : ''}`}>
+              <div
+                className={`shots ${p.twoCols ? 'two' : ''}`}
+                style={p.narrow ? { gridTemplateColumns: 'minmax(0, 420px)' } : undefined}
+              >
                 {p.shots.map((s) => (
                   <figure key={s.src}>
                     <a href={s.src} target="_blank" rel="noreferrer">
