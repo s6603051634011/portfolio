@@ -1,6 +1,8 @@
+import type { CSSProperties } from 'react'
 import AnimatedLetters from '../components/AnimatedLetters'
 import PhoneCarousel from '../components/PhoneCarousel'
 import { COURT_LIVE, COURT_REPO } from '../links'
+import '../stack.css'
 
 type Shot = { src: string; alt: string; caption: string; ratio?: string }
 type Project = {
@@ -107,48 +109,63 @@ export default function Projects() {
         <AnimatedLetters text="Projects" />
       </h1>
 
-      <div className="proj-list">
-        {projects.map((p) => (
-          <article className="proj" key={p.title}>
-            <h2>{p.title}</h2>
-            <p className="proj-blurb">{p.blurb}</p>
-            <ul>
-              {p.points.map((t) => (
-                <li key={t}>{t}</li>
-              ))}
-            </ul>
-            <div className="chips">
-              {p.tech.map((t) => (
-                <span key={t}>{t}</span>
-              ))}
+      {/* การ์ดแต่ละใบ sticky ไว้ด้านบน ใบถัดไปเลื่อนขึ้นมาทับ เลื่อนกลับก็คลี่ออกเอง (CSS ล้วน) */}
+      <div className="stack">
+        {projects.map((p, i) => (
+          <article className="stk" key={p.title} style={{ '--i': i } as CSSProperties}>
+            <header className="stk-head">
+              <span className="stk-no">{String(i + 1).padStart(2, '0')}</span>
+              <h2>{p.title}</h2>
+              {(p.repo || p.live) && (
+                <div className="stk-links">
+                  {p.repo && <a className="stk-pill" href={p.repo} target="_blank" rel="noreferrer">CODE</a>}
+                  {p.live && <a className="stk-pill" href={p.live} target="_blank" rel="noreferrer">LIVE PROJECT</a>}
+                </div>
+              )}
+            </header>
+
+            <div className={`stk-body ${p.shots ? '' : 'one'}`}>
+              <div className="stk-text">
+                <p className="stk-blurb">{p.blurb}</p>
+                <ul>
+                  {p.points.map((t) => (
+                    <li key={t}>{t}</li>
+                  ))}
+                </ul>
+                <div className="chips">
+                  {p.tech.map((t) => (
+                    <span key={t}>{t}</span>
+                  ))}
+                </div>
+              </div>
+
+              {p.shots && (
+                <div className="stk-media">
+                  {p.carousel ? (
+                    <PhoneCarousel slides={p.shots} />
+                  ) : (
+                    <div
+                      className={`shots ${p.twoCols ? 'two' : ''}`}
+                      style={p.narrow ? { gridTemplateColumns: 'minmax(0, 420px)' } : undefined}
+                    >
+                      {p.shots.map((s) => (
+                        <figure key={s.src}>
+                          <a href={s.src} target="_blank" rel="noreferrer">
+                            <img
+                              src={s.src}
+                              alt={s.alt}
+                              loading="lazy"
+                              style={s.ratio ? { aspectRatio: s.ratio } : undefined}
+                            />
+                          </a>
+                          <figcaption>{s.caption}</figcaption>
+                        </figure>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-            {p.shots && p.carousel && <PhoneCarousel slides={p.shots} />}
-            {p.shots && !p.carousel && (
-              <div
-                className={`shots ${p.twoCols ? 'two' : ''}`}
-                style={p.narrow ? { gridTemplateColumns: 'minmax(0, 420px)' } : undefined}
-              >
-                {p.shots.map((s) => (
-                  <figure key={s.src}>
-                    <a href={s.src} target="_blank" rel="noreferrer">
-                      <img
-                        src={s.src}
-                        alt={s.alt}
-                        loading="lazy"
-                        style={s.ratio ? { aspectRatio: s.ratio } : undefined}
-                      />
-                    </a>
-                    <figcaption>{s.caption}</figcaption>
-                  </figure>
-                ))}
-              </div>
-            )}
-            {(p.repo || p.live) && (
-              <div className="proj-links">
-                {p.repo && <a className="btn" href={p.repo} target="_blank" rel="noreferrer">CODE</a>}
-                {p.live && <a className="btn" href={p.live} target="_blank" rel="noreferrer">LIVE</a>}
-              </div>
-            )}
           </article>
         ))}
       </div>
