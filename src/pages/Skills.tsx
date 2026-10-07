@@ -15,25 +15,37 @@ type Skill = {
 const skills: Skill[] = [
   { id: 'python', name: 'Python', short: 'Py', status: 'core',
     text: 'The language I use most. In my thesis it runs the OCR model, validates extracted fields and handles the data.',
-    links: ['ocr', 'security'] },
+    links: ['ocr', 'llm', 'linux'] },
   { id: 'typescript', name: 'TypeScript', short: 'TS', status: 'core',
     text: 'Typed code for my web projects, including the court booking app and this portfolio.',
     links: ['react', 'firebase'] },
   { id: 'react', name: 'React & Next.js', short: 'Nx', status: 'core',
     text: 'Next.js for the court booking app (team of seven) and React with Vite for this portfolio.',
     links: ['typescript', 'firebase', 'git'] },
+  { id: 'flutter', name: 'Flutter', short: 'Fl', status: 'core',
+    text: 'Mobile development with Flutter and Dart. I built MyMood, an app for daily habits, moods and a journal.',
+    links: ['react'] },
   { id: 'firebase', name: 'Firebase', short: 'Fb', status: 'core',
     text: 'Firestore for bookings, using transactions so two people can’t book the same slot.',
     links: ['react', 'security'] },
-  { id: 'ocr', name: 'OCR & ML', short: 'ML', status: 'core',
-    text: 'Fine-tuning Typhoon-OCR 1.5 (2B) with QLoRA to read 14 fields from Thai tax invoices, running on-premise.',
-    links: ['python'] },
-  { id: 'security', name: 'Cybersecurity', short: 'Sec', status: 'learning',
-    text: 'Building a foundation from the ground up: how systems break, and how to build them so they don’t. I’m looking for an internship here.',
-    links: ['python', 'firebase'] },
   { id: 'git', name: 'Git & Vercel', short: 'Git', status: 'core',
     text: 'Every change to this portfolio is committed to GitHub and deployed on Vercel.',
     links: ['react'] },
+  { id: 'ocr', name: 'OCR & ML', short: 'ML', status: 'core',
+    text: 'Fine-tuning Typhoon-OCR 1.5 (2B) with QLoRA to read 14 fields from Thai tax invoices, running on-premise.',
+    links: ['python', 'llm'] },
+  { id: 'llm', name: 'Local LLMs', short: 'AI', status: 'core',
+    text: 'Running llama3.2:3b locally with Ollama. Function calling lets it turn a plain Thai question into real server checks.',
+    links: ['python', 'ocr', 'linux'] },
+  { id: 'linux', name: 'Linux & Networking', short: 'Lx', status: 'core',
+    text: 'Checking and configuring a Linux server over SSH (CPU, memory, interfaces, routes, connections) in my NOC Assistant project. I also worked with two Linux VMs in a cloud course.',
+    links: ['python', 'llm', 'security'] },
+  { id: 'security', name: 'Cybersecurity', short: 'Sec', status: 'learning',
+    text: 'Building a foundation from the ground up: how systems break, and how to build them so they don’t. I’m looking for an internship here.',
+    links: ['python', 'firebase', 'linux'] },
+  { id: 'electronics', name: 'Analog Electronics', short: 'El', status: 'core',
+    text: 'Built a power supply by hand for Electronic Practice I: circuit boards, transformer, heatsinks and a drilled enclosure.',
+    links: [] },
 ]
 
 export default function Skills() {
@@ -125,6 +137,8 @@ export default function Skills() {
             </div>
             <h2>{current.name}</h2>
             <p>{current.text}</p>
+            {current.links.length > 0 && (
+              <>
             <p className="sk-links-title">CONNECTED SKILLS</p>
             <div className="sk-chips">
               {current.links.map((id) => (
@@ -140,6 +154,8 @@ export default function Skills() {
                 </button>
               ))}
             </div>
+              </>
+            )}
           </div>
         )}
       </div>

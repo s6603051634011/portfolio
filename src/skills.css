@@ -1,6 +1,6 @@
 /* Skills: orbit หมุนช้าๆ */
 .sk-sub { color: var(--muted); margin: 14px 0 20px; font-size: 15px; }
-.sk-stage { --size: min(560px, 88vw); position: relative; width: var(--size); margin: 0 auto; }
+.sk-stage { --size: min(640px, 88vw); position: relative; width: var(--size); margin: 0 auto; }
 .orbit { position: relative; width: 100%; aspect-ratio: 1; }
 .orbit .ring { position: absolute; inset: 10%; border: 1px solid var(--line); border-radius: 50%; opacity: .7; }
 .orbit .ring.inner { inset: 33%; opacity: .35; }
@@ -62,6 +62,8 @@
 
 @media (max-width: 820px) {
   .sk-stage { --size: min(360px, 92vw); }
+  .label { display: none; } /* โหนดเยอะ: บนมือถือโชว์ชื่อเฉพาะโหนดที่เลือก */
+  .node.active + .label { display: block; }
   .sk-card { position: static; transform: none; width: 100%; margin-top: 24px; }
 }
 @media (prefers-reduced-motion: reduce) {
