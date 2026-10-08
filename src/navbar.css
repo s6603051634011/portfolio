@@ -46,6 +46,8 @@ main { margin-left: 0; padding: 0 6vw; }
   transition: color .2s, border-color .2s, rotate .4s;
 }
 .tb-theme:hover, .tb-theme:focus-visible { color: var(--accent); border-color: var(--accent); rotate: 25deg; outline: none; }
+.tb-term { font: 700 13px 'JetBrains Mono', ui-monospace, Consolas, monospace; letter-spacing: -.04em; }
+.tb-term:hover, .tb-term:focus-visible { rotate: 0deg; }
 .tb-menu {
   display: none; background: none; border: 2px solid var(--line); color: var(--text);
   width: 44px; height: 44px; border-radius: 50%; font-size: 18px; cursor: pointer;

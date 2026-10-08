@@ -4,7 +4,7 @@ import '../mascot.css'
 /* ปรับจากคอมโพเนนต์ตัวอย่าง: ตัวการ์ตูน SVG ที่หันหน้าตามเมาส์ กะพริบตา
    และพูดเมื่อคลิก เปลี่ยนเป็นตัวละครผู้หญิง และใช้สีตามธีมของเว็บ */
 
-export type Variant = 'home' | 'about' | 'skills' | 'projects' | 'education' | 'contact'
+export type Variant = 'home' | 'about' | 'skills' | 'projects' | 'education' | 'contact' | 'notfound'
 
 const POKED = 'Okay, you can stop poking me :)'
 const LINES: Record<Variant, string[]> = {
@@ -19,6 +19,7 @@ const LINES: Record<Variant, string[]> = {
   projects: ['Scroll down: each project stacks on the last.', 'Click a screenshot to open it full size.', POKED],
   education: ['4th year, Computer Engineering at KMUTNB.', 'Looking for a security internship.', POKED],
   contact: ['Send a message and it lands in my inbox.', 'I’m looking for a security internship.', POKED],
+  notfound: ['Hmm, this page doesn’t exist.', 'Maybe the link has a typo?', 'Let’s go back home!', POKED],
 }
 
 const SKIN = '#f7cfb0'

@@ -89,3 +89,19 @@
   .about .hp { position: static; }
   .orbit { overflow: clip; }          /* วงโคจรที่หมุนอยู่ไม่ดันหน้าให้กว้างเกิน */
 }
+
+/* Home: บทบาทแบบพิมพ์ทีละตัว */
+.role.tw { min-height: 1.9em; white-space: nowrap; }
+.tw-cur { display: inline-block; width: 2px; height: 1.2em; margin-left: 4px; vertical-align: -4px; background: var(--text); animation: tw-blink 1s steps(1) infinite; }
+@keyframes tw-blink { 50% { opacity: 0; } }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ปุ่มแม่เหล็ก (ค่า --mx/--my มาจาก hooks/useMagnetic.ts) */
+.btn.mag { transform: translate(var(--mx, 0px), var(--my, 0px)); transition: background .2s, color .2s, box-shadow .2s, translate .2s, transform .3s cubic-bezier(.3, 1.6, .5, 1); }
+
+/* หน้า 404 */
+.nf-code { font-size: clamp(90px, 16vw, 180px); line-height: 1; letter-spacing: .02em; margin: 0; }
+.nf-code .letter:nth-child(1) { color: var(--c1); }
+.nf-code .letter:nth-child(2) { color: var(--c2); }
+.nf-code .letter:nth-child(3) { color: var(--c3); }
+.nf-text { color: var(--text-soft); font-size: 16px; line-height: 1.7; max-width: 40ch; margin: 18px 0 30px; }

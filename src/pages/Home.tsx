@@ -4,6 +4,8 @@ import AnimatedLetters from '../components/AnimatedLetters'
 import Mascot from '../components/Mascot'
 import PageShapes, { type Shape } from '../components/PageShapes'
 import usePageIntro from '../hooks/usePageIntro'
+import useMagnetic from '../hooks/useMagnetic'
+import Typewriter from '../components/Typewriter'
 import { CV_URL } from '../links'
 
 const SHAPES: Shape[] = [
@@ -14,12 +16,18 @@ const SHAPES: Shape[] = [
   { kind: 'squig', x: 92, y: 18, size: 90, color: 6, speed: -70 },
 ]
 
-// แต่ละบทบาทได้สีของตัวเอง
-const ROLES = ['Computer Engineering student', 'Security intern candidate', 'Full-stack developer']
+// บทบาทที่พิมพ์วนทีละอัน แต่ละอันมีสีของตัวเอง
+const ROLES = [
+  { text: 'Computer Engineering student', color: 'var(--c2)' },
+  { text: 'Security intern candidate', color: 'var(--c1)' },
+  { text: 'Full-stack developer', color: 'var(--c3)' },
+]
 
 export default function Home() {
   const root = useRef<HTMLElement>(null)
   usePageIntro(root)
+  const actions = useRef<HTMLDivElement>(null)
+  useMagnetic(actions)
 
   return (
     <section className="page hero fx-page" ref={root}>
@@ -33,17 +41,12 @@ export default function Home() {
           <br />
           <AnimatedLetters text="developer." className="sub" />
         </h1>
-        <p className="role" data-intro>
-          {ROLES.map((r, i) => (
-            <span key={r}>
-              {i > 0 && <span className="role-sep"> / </span>}
-              <span className="role-item" style={{ color: `var(--c${i + 2})` }}>{r}</span>
-            </span>
-          ))}
-        </p>
-        <div className="hero-actions" data-intro>
-          <Link to="/contact" className="btn">CONTACT ME</Link>
-          <a href={CV_URL} className="btn btn-fill" download>DOWNLOAD CV</a>
+        <div data-intro>
+          <Typewriter items={ROLES} className="role" />
+        </div>
+        <div className="hero-actions" data-intro ref={actions}>
+          <Link to="/contact" className="btn mag">CONTACT ME</Link>
+          <a href={CV_URL} className="btn btn-fill mag" download>DOWNLOAD CV</a>
         </div>
       </div>
       <div data-reveal="pop">

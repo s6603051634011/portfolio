@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { getTheme, setTheme, type Theme } from '../theme'
 import { Link, NavLink } from 'react-router-dom'
 import { GITHUB } from '../links'
 
@@ -11,19 +12,15 @@ const links = [
   { to: '/contact', label: 'Contact', mobileOnly: true }, // บนจอใหญ่ใช้ปุ่ม Contact ด้านขวาแทน
 ]
 
-type Theme = 'warm' | 'night'
-
-// สลับธีมกลางวัน (warm) / กลางคืน (night) และจำค่าที่เลือกไว้ในเบราว์เซอร์
+// ปุ่มสลับธีม: ใช้ตัวจัดการธีมกลาง (theme.ts) เพื่อให้ตรงกับคำสั่ง theme ใน terminal
 function useTheme() {
-  const [theme, setTheme] = useState<Theme>(() =>
-    document.documentElement.dataset.theme === 'night' ? 'night' : 'warm'
-  )
-  const toggle = () => {
-    const next: Theme = theme === 'warm' ? 'night' : 'warm'
-    document.documentElement.dataset.theme = next
-    try { localStorage.setItem('theme', next) } catch { /* เบราว์เซอร์ไม่ให้เก็บค่า ก็ไม่เป็นไร */ }
-    setTheme(next)
-  }
+  const [theme, setLocal] = useState<Theme>(getTheme)
+  useEffect(() => {
+    const sync = () => setLocal(getTheme())
+    window.addEventListener('themechange', sync)
+    return () => window.removeEventListener('themechange', sync)
+  }, [])
+  const toggle = () => setTheme(theme === 'warm' ? 'night' : 'warm')
   return [theme, toggle] as const
 }
 
@@ -56,6 +53,15 @@ export default function Navbar() {
         {GITHUB && (
           <a className="tb-gh" href={GITHUB} target="_blank" rel="noreferrer">GitHub</a>
         )}
+        <button
+          type="button"
+          className="tb-theme tb-term"
+          onClick={() => window.dispatchEvent(new Event('terminal-toggle'))}
+          aria-label="Open terminal"
+          title="Terminal (press `)"
+        >
+          <span aria-hidden="true">&gt;_</span>
+        </button>
         <button
           type="button"
           className="tb-theme"
