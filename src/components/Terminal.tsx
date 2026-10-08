@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CV_URL, EMAIL } from '../links'
 import { setTheme } from '../theme'
 import '../terminal.css'
 
 /* โหมด terminal: กด ` (ปุ่มซ้ายของเลข 1) หรือปุ่ม >_ ในแถบเมนู
+   ลากแถบหัวเพื่อย้ายตำแหน่ง (บนคอม) กด – หรือจุดเหลืองเพื่อพับเก็บ จุดเขียวเพื่อกลับตำแหน่งเดิม
    พิมพ์ help เพื่อดูคำสั่ง  กด Esc หรือพิมพ์ exit เพื่อปิด
    แก้ข้อความของแต่ละคำสั่งได้ที่ COMMANDS ด้านล่าง */
 
@@ -47,6 +48,14 @@ export default function Terminal() {
   const [value, setValue] = useState('')
   const [history, setHistory] = useState<string[]>([])
   const [hIndex, setHIndex] = useState(-1)
+  const [min, setMin] = useState(false) // พับเก็บเป็นแถบเล็ก
+  const [pos, setPos] = useState<{ x: number; y: number } | null>(null) // ตำแหน่งที่ลากไปวาง (null = ตำแหน่งเริ่มต้น)
+  const box = useRef<HTMLDivElement>(null)
+  const drag = useRef<{ dx: number; dy: number } | null>(null)
+  const minRef = useRef(false)
+  useEffect(() => { minRef.current = min }, [min])
+  // ปิดหน้าต่าง (เปิดใหม่จะกลับมาแบบกางออก)
+  const close = () => { setOpen(false); setMin(false) }
   const input = useRef<HTMLInputElement>(null)
   const out = useRef<HTMLDivElement>(null)
   const nextId = useRef(0)
@@ -62,10 +71,14 @@ export default function Terminal() {
       const typing = t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable
       if (e.key === '`' && (!typing || t === input.current)) {
         e.preventDefault()
-        setOpen((o) => !o)
-      } else if (e.key === 'Escape') setOpen(false)
+        toggle()
+      } else if (e.key === 'Escape') { setOpen(false); setMin(false) }
     }
-    const onToggle = () => setOpen((o) => !o)
+    // ถ้าพับเก็บอยู่ ให้กางออก ถ้าไม่ได้พับ ให้เปิด/ปิด
+    const toggle = () => {
+      if (minRef.current) { setMin(false); setOpen(true) } else setOpen((o) => !o)
+    }
+    const onToggle = () => toggle()
     window.addEventListener('keydown', onKey)
     window.addEventListener('terminal-toggle', onToggle)
     return () => {
@@ -79,8 +92,36 @@ export default function Terminal() {
     if (lines.length === 0) {
       setLines([{ id: nextId.current++, node: <>Welcome, guest. Type {c('yellow', 'help')} to see commands, {c('yellow', 'exit')} or {c('yellow', 'Esc')} to close.</> }])
     }
-    input.current?.focus()
-  }, [open, lines.length])
+    if (!min) input.current?.focus()
+  }, [open, min, lines.length])
+
+  // ลากหน้าต่างด้วยแถบหัว (เฉพาะเมาส์ บนจอสัมผัสจะอยู่ด้านล่างจอเหมือนเดิม)
+  const startDrag = (e: PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== 'mouse' || (e.target as HTMLElement).closest('button')) return
+    const r = box.current!.getBoundingClientRect()
+    drag.current = { dx: e.clientX - r.left, dy: e.clientY - r.top }
+    e.currentTarget.setPointerCapture(e.pointerId)
+    e.preventDefault()
+  }
+  const onDrag = (e: PointerEvent<HTMLDivElement>) => {
+    if (!drag.current || !box.current) return
+    const r = box.current.getBoundingClientRect()
+    const x = Math.min(Math.max(8, e.clientX - drag.current.dx), innerWidth - r.width - 8)
+    const y = Math.min(Math.max(8, e.clientY - drag.current.dy), innerHeight - 48)
+    setPos({ x, y })
+  }
+  const endDrag = () => { drag.current = null }
+
+  // ย่อขนาดหน้าต่างเบราว์เซอร์แล้วหน้าต่างไม่หลุดจอ
+  useEffect(() => {
+    if (!pos) return
+    const keep = () => setPos((p) => p && ({
+      x: Math.min(p.x, Math.max(8, innerWidth - (box.current?.offsetWidth ?? 300) - 8)),
+      y: Math.min(p.y, innerHeight - 48),
+    }))
+    window.addEventListener('resize', keep)
+    return () => window.removeEventListener('resize', keep)
+  }, [pos])
 
   useEffect(() => {
     out.current?.scrollTo({ top: out.current.scrollHeight })
@@ -99,7 +140,7 @@ export default function Terminal() {
     } else if (name === 'clear') {
       setLines([])
     } else if (name === 'exit') {
-      setOpen(false)
+      close()
     } else if (name === 'cv') {
       const a = document.createElement('a')
       a.href = CV_URL
@@ -147,12 +188,33 @@ export default function Terminal() {
 
   if (!open) return null
 
+  if (min) {
+    return (
+      <button type="button" className="tm-pill" onClick={() => setMin(false)} aria-label="Open terminal">
+        <span className="tm-green">&gt;_</span> guest@phimlaphat
+      </button>
+    )
+  }
+
   return (
-    <div className="tm" role="dialog" aria-label="Terminal" aria-modal="false" onClick={() => input.current?.focus()}>
-      <div className="tm-bar">
-        <span className="tm-dots" aria-hidden="true"><i /><i /><i /></span>
+    <div
+      ref={box}
+      className={`tm ${pos ? 'moved' : ''}`}
+      style={pos ? { left: pos.x, top: pos.y } : undefined}
+      role="dialog"
+      aria-label="Terminal"
+      aria-modal="false"
+      onClick={() => input.current?.focus()}
+    >
+      <div className="tm-bar" onPointerDown={startDrag} onPointerMove={onDrag} onPointerUp={endDrag} onPointerCancel={endDrag}>
+        <span className="tm-dots">
+          <button type="button" aria-label="Close terminal" title="Close" onClick={close} />
+          <button type="button" aria-label="Minimize terminal" title="Minimize" onClick={() => setMin(true)} />
+          <button type="button" aria-label="Reset position" title="Reset position" onClick={() => setPos(null)} />
+        </span>
         <span className="tm-title">guest@phimlaphat: ~</span>
-        <button type="button" className="tm-close" aria-label="Close terminal" onClick={() => setOpen(false)}>✕</button>
+        <button type="button" className="tm-close" aria-label="Minimize terminal" title="Minimize" onClick={() => setMin(true)}>–</button>
+        <button type="button" className="tm-close" aria-label="Close terminal" title="Close" onClick={close}>✕</button>
       </div>
       <div className="tm-out" ref={out} aria-live="polite">
         {lines.map((l) => (
