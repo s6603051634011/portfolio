@@ -1,28 +1,8 @@
 /* Education page: การ์ดหลากสี + เส้น timeline ไล่สี + รูปทรง parallax + แถบตัวหนังสือวิ่ง
    แอนิเมชันหลักอยู่ใน pages/Education.tsx (gsap + ScrollTrigger) */
 .edu { position: relative; }
-.bg-title { font-size: clamp(34px, 5vw, 68px); margin: 8px 0 0; position: relative; z-index: 1; }
-.bg-sub { color: var(--muted); margin: 14px 0 48px; font-size: 15px; position: relative; z-index: 1; }
-
-/* ---------- รูปทรงตกแต่งพื้นหลัง ---------- */
-.edu-shapes { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
-.edu-shape { position: absolute; display: block; }
-.edu-shape::before { content: ''; position: absolute; inset: 0; animation: edu-float 7s ease-in-out infinite; animation-delay: var(--d); }
-.s-ring::before { border: 10px solid var(--sc); border-radius: 50%; opacity: .55; }
-.s-dot::before { background: var(--sc); border-radius: 50%; opacity: .7; }
-.s-star::before {
-  background: var(--sc); opacity: .6;
-  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-  animation-name: edu-spin; animation-duration: 18s; animation-timing-function: linear;
-}
-.s-squig::before {
-  opacity: .55;
-  background: var(--sc);
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Cpath d='M4 20 Q16 4 28 20 T52 20 T76 20 T100 20' fill='none' stroke='black' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
-          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Cpath d='M4 20 Q16 4 28 20 T52 20 T76 20 T100 20' fill='none' stroke='black' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
-}
-@keyframes edu-float { 50% { transform: translateY(-14px) rotate(8deg); } }
-@keyframes edu-spin { to { transform: rotate(360deg); } }
+.bg-title { font-size: clamp(34px, 5vw, 68px); margin: 8px 0 0; }
+.bg-sub { color: var(--muted); margin: 14px 0 48px; font-size: 15px; }
 
 /* ---------- Timeline ---------- */
 .edu .timeline { border-left: 0; margin: 0; position: relative; z-index: 1; max-width: 780px; display: grid; gap: 28px; padding: 4px 0 4px 40px; }
@@ -104,9 +84,8 @@
   .edu .timeline { padding-left: 32px; }
   .edu .t-dot { left: -32px; width: 18px; height: 18px; }
   .edu .t-card { grid-template-columns: 1fr; }
-  .edu-shape.s-ring, .edu-shape.s-squig { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .edu-shape::before, .edu .t-dot::after, .edu .t-card::before, .edu .badge::before { animation: none; }
+  .edu .t-dot::after, .edu .t-card::before, .edu .badge::before { animation: none; }
 }

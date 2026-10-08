@@ -3,29 +3,30 @@
 .stk {
   position: sticky; top: calc(92px + var(--i) * 40px);
   background: var(--surface); color: var(--surface-text);
-  border: 2px solid var(--line); border-radius: 24px; box-shadow: 6px 6px 0 var(--accent-shadow);
+  border: 2px solid var(--line); border-radius: 24px; box-shadow: 6px 6px 0 var(--ic, var(--accent-shadow));
   padding: 14px 24px 24px; margin-bottom: 36px;
 }
 .stk:last-child { position: relative; top: auto; margin-bottom: 0; }
 
 .stk-head { display: flex; align-items: center; gap: 16px; min-height: 44px; margin-bottom: 14px; }
-.stk-no { font-family: var(--font-display); font-size: 28px; line-height: 1; color: var(--text); }
+.stk-no { font-family: var(--font-display); font-size: 28px; line-height: 1; color: var(--ic, var(--text)); }
 .stk-head h2 {
   flex: 1; margin: 0; font-family: var(--font-display); font-weight: 400;
-  font-size: clamp(18px, 2vw, 24px); line-height: 1.2; color: var(--accent);
+  font-size: clamp(18px, 2vw, 24px); line-height: 1.2; color: color-mix(in srgb, var(--ic, var(--accent)) 82%, var(--text));
 }
 .stk-links { display: flex; gap: 8px; }
 .stk-pill {
   border: 2px solid var(--line); border-radius: 999px; padding: 6px 16px; color: var(--text);
   font-size: 11px; font-weight: 700; letter-spacing: .12em; text-decoration: none; transition: border-color .2s, color .2s;
 }
-.stk-pill:hover, .stk-pill:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+.stk-pill:hover, .stk-pill:focus-visible { border-color: var(--ic, var(--accent)); color: var(--ic, var(--accent)); outline: none; }
 
 .stk-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
 .stk-body.one { grid-template-columns: 1fr; }
 .stk-blurb { margin: 0 0 12px; font-size: 15px; }
 .stk ul { margin: 0 0 16px; padding-left: 18px; font-size: 14px; line-height: 1.6; color: var(--text-soft); }
 .stk .chips { margin-bottom: 0; }
+.stk .chips span { border-color: var(--ic, var(--accent)); }
 .stk-media .shots, .stk-media .pc { margin-bottom: 0; }
 .stk .pc-slide { width: min(200px, 72vw); }
 
@@ -35,44 +36,45 @@
 }
 @media (max-width: 820px) {
   .stk { padding: 14px 16px 20px; }
-  .stk-body { grid-template-columns: 1fr; }
+  .stk-body { grid-template-columns: minmax(0, 1fr); } /* minmax กันเนื้อหาดันการ์ดกว้างเกินจอ */
   .stk-head h2 { font-size: 18px; }
 }
 
 /* ============ ไฟวิ่งรอบขอบการ์ด ============
-   สีมาจากธีม: หัวไฟ = --accent, หางไฟ = --accent-shadow
+   สีไฟ = สีประจำการ์ด --ic (ไล่จากจางไปเข้ม)
+   วิธีทำ: วาดวงสีไล่ (conic) ไว้ครั้งเดียว แล้วหมุนด้วย transform ซึ่งการ์ดจอทำให้
+   (ไม่ต้องวาดใหม่ทุกเฟรม จึงเลื่อนหน้าได้ลื่น) แล้วใช้ mask ตัดให้เหลือแค่วงขอบ
    ปรับได้: --run-speed (ความเร็ว), --run-width (ความหนาเส้นไฟ) */
-@property --run-angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
-}
 .stk { --run-speed: 5s; --run-width: 4px; }
-.stk::before {
-  content: '';
-  position: absolute;
-  inset: -2px;                       /* ทับเส้นขอบเดิม 2px พอดี */
-  padding: var(--run-width);
-  border-radius: inherit;
-  background: conic-gradient(
-    from var(--run-angle),
-    transparent 0 72%,
-    var(--accent-shadow) 86%,
-    var(--accent) 98%,
-    transparent 100%
-  );
-  /* ตัดตรงกลางออก ให้เหลือแค่วงขอบ */
+.stk-light {
+  position: absolute; inset: -2px;   /* ทับเส้นขอบเดิม 2px พอดี */
+  padding: var(--run-width); border-radius: inherit;
+  overflow: hidden; pointer-events: none; z-index: 1;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
           mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-  animation: stk-run var(--run-speed) linear infinite;
-  animation-delay: calc(var(--i) * -1.3s); /* แต่ละการ์ดไฟอยู่คนละตำแหน่ง ไม่วิ่งพร้อมกัน */
-  pointer-events: none;
-  z-index: 1;
 }
-@keyframes stk-run { to { --run-angle: 360deg; } }
+.stk-light i {
+  position: absolute; left: 50%; top: 50%;
+  width: 150%; aspect-ratio: 1;      /* ใหญ่พอให้คลุมทั้งการ์ดตอนหมุน */
+  background: conic-gradient(
+    transparent 0 72%,
+    color-mix(in srgb, var(--ic, var(--accent)) 35%, transparent) 86%,
+    var(--ic, var(--accent)) 98%,
+    transparent 100%
+  );
+  transform: translate(-50%, -50%) rotate(0deg);
+  animation: stk-spin var(--run-speed) linear infinite;
+  animation-delay: calc(var(--i) * -1.3s); /* แต่ละการ์ดไฟอยู่คนละตำแหน่ง */
+  animation-play-state: paused;
+}
+.stk.run .stk-light i { animation-play-state: running; will-change: transform; } /* วิ่งเฉพาะการ์ดที่มองเห็น */
+@keyframes stk-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+@media (max-width: 820px) {
+  .stk-light i { width: 400%; } /* การ์ดบนมือถือสูงกว่ากว้าง */
+}
 
 /* ผู้ใช้ที่ปิดแอนิเมชันในระบบ: ไม่วิ่ง */
 @media (prefers-reduced-motion: reduce) {
-  .stk::before { animation: none; }
+  .stk-light i { animation: none; }
 }

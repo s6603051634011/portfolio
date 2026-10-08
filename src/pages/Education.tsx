@@ -1,10 +1,10 @@
-import { useLayoutEffect, useRef, type CSSProperties, type PointerEvent, type ReactNode } from 'react'
+import { useRef, type CSSProperties, type PointerEvent, type ReactNode } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import AnimatedLetters from '../components/AnimatedLetters'
+import PageShapes, { type Shape } from '../components/PageShapes'
+import usePageIntro, { enter } from '../hooks/usePageIntro'
 import '../education.css'
-
-gsap.registerPlugin(ScrollTrigger)
 
 type Item = {
   title: string
@@ -39,7 +39,7 @@ const education: Item[] = [
 ]
 
 // คำที่วิ่งในแถบด้านล่าง (ดึงจากข้อมูลด้านบน)
-const ribbon = ['KMUTNB', 'Electronics Engineering', 'St.Mary School', 'Science-Mathematics']
+const ribbon = ['KMUTNB', 'Computer Engineering', 'Cybersecurity', 'St.Mary School', 'Science-Mathematics']
 
 const Cap = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -53,72 +53,49 @@ const Book = () => (
 )
 const ICONS: Record<Item['icon'], ReactNode> = { cap: <Cap />, book: <Book /> }
 
-// รูปทรงตกแต่งพื้นหลัง: [ชนิด, ตำแหน่ง x %, y %, ขนาด px, สี, ความเร็ว parallax]
-const SHAPES: [string, number, number, number, string, number][] = [
-  ['ring', 84, 20, 90, 'var(--c1)', -80],
-  ['dot', 92, 38, 26, 'var(--c4)', -160],
-  ['star', 70, 62, 44, 'var(--c5)', -60],
-  ['squig', 88, 82, 110, 'var(--c6)', -120],
-  ['dot', 4, 92, 18, 'var(--c2)', -200],
+// รูปทรงตกแต่งพื้นหลัง
+const SHAPES: Shape[] = [
+  { kind: 'ring', x: 84, y: 20, size: 90, color: 1, speed: -80 },
+  { kind: 'dot', x: 92, y: 38, size: 26, color: 4, speed: -160 },
+  { kind: 'star', x: 70, y: 62, size: 44, color: 5, speed: -60 },
+  { kind: 'squig', x: 88, y: 82, size: 110, color: 6, speed: -120 },
+  { kind: 'dot', x: 4, y: 92, size: 18, color: 2, speed: -200 },
 ]
 
 export default function Education() {
   const root = useRef<HTMLElement>(null)
 
-  useLayoutEffect(() => {
-    const mm = gsap.matchMedia()
-    // ผู้ใช้ที่ไม่ได้ปิดแอนิเมชันในระบบเท่านั้น
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      const q = gsap.utils.selector(root)
-
-      // หัวข้อ: ตัวอักษรตกลงมาทีละตัว
-      gsap.from(q('.bg-title .letter'), {
-        y: -70, rotation: () => gsap.utils.random(-40, 40), opacity: 0,
-        duration: 0.8, ease: 'back.out(2)', stagger: 0.05,
-      })
-      gsap.from(q('.bg-sub'), { y: 16, opacity: 0, duration: 0.6, delay: 0.5 })
-
-      // เส้น timeline ค่อยๆ ยาวลงตามการเลื่อน
-      gsap.fromTo(q('.timeline-fill'), { scaleY: 0 }, {
-        scaleY: 1, ease: 'none',
-        scrollTrigger: { trigger: q('.timeline')[0], start: 'top 75%', end: 'bottom 60%', scrub: 0.6 },
-      })
-
-      // การ์ด: สไลด์เข้าจากด้านขวาสลับซ้าย หมุนนิดๆ จุดบนเส้นเด้งตาม
-      q('.t-item').forEach((item, i) => {
-        const tl = gsap.timeline({ scrollTrigger: { trigger: item, start: 'top 88%' } })
-        tl.from(item.querySelector('.t-card'), {
-          x: i % 2 ? -120 : 120, rotation: i % 2 ? -4 : 4, opacity: 0, duration: 0.9, ease: 'power3.out',
-        })
-          .from(item.querySelector('.t-dot'), { scale: 0, duration: 0.5, ease: 'back.out(3)' }, '-=0.6')
-          .from(item.querySelector('.t-icon'), { rotation: -180, scale: 0.4, duration: 0.6, ease: 'back.out(2)' }, '-=0.5')
-      })
-
-      // รูปทรงพื้นหลัง: เลื่อนด้วยความเร็วต่างกัน (parallax)
-      q('.edu-shape').forEach((el) => {
-        gsap.to(el, {
-          y: Number((el as HTMLElement).dataset.speed), ease: 'none',
-          scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true },
-        })
-      })
-
-      // แถบตัวหนังสือวิ่ง: เลื่อนหน้าเร็ว แถบก็วิ่งเร็วตาม และกลับทิศตามทิศการเลื่อน
-      const track = q('.rb-track')[0]
-      const loop = gsap.to(track, { xPercent: -50, duration: 22, ease: 'none', repeat: -1 })
-      loop.totalTime(22 * 50) // เริ่มกลางๆ เพื่อให้วิ่งถอยหลังได้ไม่สะดุด
-      ScrollTrigger.create({
-        trigger: root.current, start: 'top top', end: 'bottom bottom',
-        onUpdate: (self) => {
-          const boost = gsap.utils.clamp(1, 6, Math.abs(self.getVelocity()) / 300)
-          gsap.to(loop, {
-            timeScale: self.direction * boost, duration: 0.2, overwrite: true,
-            onComplete: () => { gsap.to(loop, { timeScale: self.direction, duration: 1 }) },
-          })
-        },
-      })
+  usePageIntro(root, (q) => {
+    // เส้น timeline ค่อยๆ ยาวลงตามการเลื่อน
+    gsap.fromTo(q('.timeline-fill'), { scaleY: 0 }, {
+      scaleY: 1, ease: 'none',
+      scrollTrigger: { trigger: q('.timeline')[0], start: 'top 75%', end: 'bottom 60%', scrub: 0.6 },
     })
-    return () => mm.revert()
-  }, [])
+
+    // การ์ด: สไลด์เข้าจากด้านขวาสลับซ้าย หมุนนิดๆ จุดบนเส้นเด้งตาม
+    q('.t-item').forEach((item, i) => {
+      const tl = gsap.timeline({ scrollTrigger: { trigger: item, start: 'top 88%' } })
+      tl.add(enter(item.querySelector('.t-card'),
+        { x: i % 2 ? -120 : 120, rotation: i % 2 ? -4 : 4, opacity: 0 }, { duration: 0.9, ease: 'power3.out' }))
+        .add(enter(item.querySelector('.t-dot'), { scale: 0 }, { duration: 0.5, ease: 'back.out(3)' }), '-=0.6')
+        .add(enter(item.querySelector('.t-icon'), { rotation: -180, scale: 0.4 }, { duration: 0.6, ease: 'back.out(2)' }), '-=0.5')
+    })
+
+    // แถบตัวหนังสือวิ่ง: เลื่อนหน้าเร็ว แถบก็วิ่งเร็วตาม และกลับทิศตามทิศการเลื่อน
+    const track = q('.rb-track')[0]
+    const loop = gsap.to(track, { xPercent: -50, duration: 22, ease: 'none', repeat: -1 })
+    loop.totalTime(22 * 50) // เริ่มกลางๆ เพื่อให้วิ่งถอยหลังได้ไม่สะดุด
+    ScrollTrigger.create({
+      trigger: root.current, start: 'top top', end: 'bottom bottom',
+      onUpdate: (self) => {
+        const boost = gsap.utils.clamp(1, 6, Math.abs(self.getVelocity()) / 300)
+        gsap.to(loop, {
+          timeScale: self.direction * boost, duration: 0.2, overwrite: true,
+          onComplete: () => { gsap.to(loop, { timeScale: self.direction, duration: 1 }) },
+        })
+      },
+    })
+  })
 
   // การ์ดเอียงตามเมาส์ (ใช้ gsap เพื่อไม่ให้ตีกับแอนิเมชันตอนเข้า)
   const tilt = (e: PointerEvent<HTMLElement>) => {
@@ -133,22 +110,13 @@ export default function Education() {
   }
 
   return (
-    <section className="page edu" ref={root}>
-      <div className="edu-shapes" aria-hidden="true">
-        {SHAPES.map(([kind, x, y, size, color, speed], i) => (
-          <span
-            key={i}
-            className={`edu-shape s-${kind}`}
-            data-speed={speed}
-            style={{ left: `${x}%`, top: `${y}%`, width: size, height: size, '--sc': color, '--d': `${i * 0.7}s` } as CSSProperties}
-          />
-        ))}
-      </div>
+    <section className="page edu fx-page" ref={root}>
+      <PageShapes shapes={SHAPES} />
 
-      <h1 className="bg-title">
+      <h1 className="bg-title page-title">
         <AnimatedLetters text="Education." colorful />
       </h1>
-      <p className="bg-sub">Where I have studied.</p>
+      <p className="bg-sub" data-intro>Where I have studied.</p>
 
       <div className="timeline">
         <span className="timeline-fill" aria-hidden="true" />

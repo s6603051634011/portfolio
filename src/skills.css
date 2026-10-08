@@ -98,9 +98,9 @@
 }
 
 /* ---------- จอกว้าง: วงโคจรซ้าย + Toolbox ขวา ---------- */
-.tb-box { transition: opacity .2s, transform .2s, box-shadow .2s; }
-.tb-grid.has-sel .tb-box:not(.on) { opacity: .45; }
-.tb-box.on { box-shadow: 4px 4px 0 var(--g); transform: translate(-2px, -2px); }
+.tb-box { transition: filter .2s, translate .2s, box-shadow .2s; } /* ไม่ transition opacity/transform เพราะ gsap ใช้ตอนเข้าหน้า */
+.tb-grid.has-sel .tb-box:not(.on) { filter: opacity(.45); }
+.tb-box.on { box-shadow: 4px 4px 0 var(--g); translate: -2px -2px; }
 
 @media (min-width: 1000px) {
   .sk-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 40px; align-items: center; margin-top: 8px; }

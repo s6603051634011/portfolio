@@ -1,0 +1,68 @@
+/* ============ ของตกแต่งที่ใช้ร่วมกันทุกหน้า ============ */
+/* หน้าใดมี <PageShapes> ให้ใส่คลาส fx-page ที่ section ของหน้า */
+.fx-page { position: relative; }
+.fx-page > :not(.deco-shapes) { position: relative; z-index: 1; }
+
+.deco-shapes { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.deco-shape { position: absolute; display: block; }
+.deco-shape::before {
+  content: ''; position: absolute; inset: 0;
+  animation: fx-float 7s ease-in-out infinite; animation-delay: var(--d);
+}
+.s-ring::before { border: 9px solid var(--sc); border-radius: 50%; opacity: .5; }
+.s-dot::before { background: var(--sc); border-radius: 50%; opacity: .65; }
+.s-star::before {
+  background: var(--sc); opacity: .55;
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation-name: fx-spin; animation-duration: 18s; animation-timing-function: linear;
+}
+.s-plus::before {
+  background: var(--sc); opacity: .55;
+  clip-path: polygon(38% 0, 62% 0, 62% 38%, 100% 38%, 100% 62%, 62% 62%, 62% 100%, 38% 100%, 38% 62%, 0 62%, 0 38%, 38% 38%);
+  animation-name: fx-spin; animation-duration: 14s; animation-timing-function: linear; animation-direction: reverse;
+}
+.s-tri::before {
+  background: var(--sc); opacity: .5; border-radius: 4px;
+  clip-path: polygon(50% 4%, 96% 92%, 4% 92%);
+}
+.s-squig::before {
+  opacity: .5; background: var(--sc);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Cpath d='M4 20 Q16 4 28 20 T52 20 T76 20 T100 20' fill='none' stroke='black' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Cpath d='M4 20 Q16 4 28 20 T52 20 T76 20 T100 20' fill='none' stroke='black' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+@keyframes fx-float { 50% { transform: translateY(-14px) rotate(8deg); } }
+@keyframes fx-spin { to { transform: rotate(360deg); } }
+
+/* ตัวอักษรหัวข้อต้องเป็น inline-block เพื่อให้หมุนได้ (มีอยู่แล้วใน .letter) */
+
+@media (max-width: 820px) {
+  .deco-shape.s-ring, .deco-shape.s-squig { display: none; } /* จอเล็กเหลือแค่ชิ้นเล็กๆ ไม่บังเนื้อหา */
+  .deco-shape { opacity: .5; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .deco-shape::before { animation: none; }
+}
+
+/* ============ สีเฉพาะหน้า ============ */
+/* Home: บทบาทแต่ละอันมีสีของตัวเอง */
+.role .role-item { font-weight: 700; }
+.role .role-sep { color: var(--muted); }
+
+/* ปุ่มหลัก: ชี้แล้วเติมสีพร้อมเงาสีรอง */
+.btn { transition: background .2s, color .2s, box-shadow .2s, translate .2s; }
+.btn:hover, .btn:focus-visible { box-shadow: 5px 5px 0 var(--accent-shadow); translate: -2px -2px; }
+
+/* About: ลิงก์ในเนื้อหาสลับสี */
+.about .hp:nth-of-type(odd) .hp-link { border-bottom-color: var(--c2); }
+.about .hp:nth-of-type(even) .hp-link { border-bottom-color: var(--c3); }
+.about .hp:nth-of-type(odd) .hp-link:hover { color: var(--c2); }
+.about .hp:nth-of-type(even) .hp-link:hover { color: var(--c3); }
+
+/* Contact: แต่ละช่องมีสีกรอบตอนพิมพ์ต่างกัน */
+.contact input[name='name']:focus { outline-color: var(--c2); }
+.contact input[name='email']:focus { outline-color: var(--c3); }
+.contact input[name='subject']:focus { outline-color: var(--c4); }
+.contact textarea:focus { outline-color: var(--c5); }
+.contact input:focus, .contact textarea:focus { outline-width: 3px; }
+.map-wrap { width: 100%; }
+.map-wrap .map { border: 2px solid var(--line); border-radius: 18px; box-shadow: 8px 8px 0 var(--c2); }

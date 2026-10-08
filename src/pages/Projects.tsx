@@ -1,5 +1,7 @@
-import type { CSSProperties } from 'react'
+import { useEffect, useRef, type CSSProperties } from 'react'
 import AnimatedLetters from '../components/AnimatedLetters'
+import PageShapes, { type Shape } from '../components/PageShapes'
+import usePageIntro from '../hooks/usePageIntro'
 import PhoneCarousel from '../components/PhoneCarousel'
 import { COURT_LIVE, COURT_REPO } from '../links'
 import '../stack.css'
@@ -102,17 +104,56 @@ const projects: Project[] = [
   },
 ]
 
+const SHAPES: Shape[] = [
+  { kind: 'ring', x: 40, y: 3.2, size: 70, color: 2, speed: -200 },
+  { kind: 'star', x: 90, y: 3.6, size: 34, color: 4, speed: -120 },
+]
+
 export default function Projects() {
+  const root = useRef<HTMLElement>(null)
+  usePageIntro(root)
+
+  // ไฟวิ่งเฉพาะการ์ดที่มองเห็น: การ์ดที่ถูกใบถัดไปซ้อนทับหรือยังไม่เลื่อนมาถึงจะหยุดไฟไว้ (ช่วยให้เลื่อนลื่น)
+  useEffect(() => {
+    const cards = [...(root.current?.querySelectorAll<HTMLElement>('.stk') ?? [])]
+    let raf = 0
+    const update = () => {
+      raf = 0
+      const rects = cards.map((c) => c.getBoundingClientRect())
+      cards.forEach((c, i) => {
+        const next = rects[i + 1]
+        const covered = next && next.top < rects[i].top + 120 // ใบถัดไปเลื่อนขึ้นมาทับแล้ว
+        const onScreen = rects[i].top < innerHeight && rects[i].bottom > 0
+        c.classList.toggle('run', onScreen && !covered)
+      })
+    }
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update) }
+    update()
+    addEventListener('scroll', onScroll, { passive: true })
+    addEventListener('resize', onScroll)
+    return () => {
+      removeEventListener('scroll', onScroll)
+      removeEventListener('resize', onScroll)
+      cancelAnimationFrame(raf)
+    }
+  }, [])
+
   return (
-    <section className="page">
-      <h1 className="title">
-        <AnimatedLetters text="Projects" />
+    <section className="page fx-page" ref={root}>
+      <PageShapes shapes={SHAPES} />
+      <h1 className="title page-title">
+        <AnimatedLetters text="Projects" colorful />
       </h1>
 
       {/* การ์ดแต่ละใบ sticky ไว้ด้านบน ใบถัดไปเลื่อนขึ้นมาทับ เลื่อนกลับก็คลี่ออกเอง (CSS ล้วน) */}
       <div className="stack">
         {projects.map((p, i) => (
-          <article className="stk" key={p.title} style={{ '--i': i } as CSSProperties}>
+          <article
+            className="stk"
+            key={p.title}
+            style={{ '--i': i, '--ic': `var(--c${(i % 5) + 1})` } as CSSProperties}
+          >
+            <span className="stk-light" aria-hidden="true"><i /></span>
             <header className="stk-head">
               <span className="stk-no">{String(i + 1).padStart(2, '0')}</span>
               <h2>{p.title}</h2>

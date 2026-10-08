@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import AnimatedLetters from '../components/AnimatedLetters'
+import PageShapes, { type Shape } from '../components/PageShapes'
+import usePageIntro, { enter as animIn } from '../hooks/usePageIntro'
 import '../skills.css'
 
 type GroupId = 'lang' | 'web' | 'ai' | 'sys' | 'hw'
@@ -23,6 +25,12 @@ const groups: { id: GroupId; name: string; color: string; tools: string[] }[] = 
   { id: 'hw', name: 'Hardware', color: 'var(--c5)', tools: ['Analog electronics', 'Circuit assembly'] },
 ]
 
+
+const SHAPES: Shape[] = [
+  { kind: 'star', x: 1, y: 60, size: 34, color: 5, speed: -80 },
+  { kind: 'dot', x: 60, y: 10, size: 18, color: 4, speed: -140 },
+  { kind: 'tri', x: 58, y: 88, size: 30, color: 6, speed: -60 },
+]
 
 // แก้ข้อความหรือเพิ่มทักษะได้ที่นี่ (วงจะจัดตำแหน่งให้เอง)
 const skills: Skill[] = [
@@ -76,6 +84,15 @@ export default function Skills() {
   const [pinned, setPinned] = useState<string | null>(null) // ทักษะที่กดค้างไว้
   const [hover, setHover] = useState<string | null>(null) // ทักษะที่กำลังชี้
   const timer = useRef<number | undefined>(undefined)
+  const root = useRef<HTMLElement>(null)
+
+  usePageIntro(root, (q) => {
+    // วงโคจรหมุนเข้ามาพร้อมขยาย แล้ววงทักษะเด้งออกมาทีละวง
+    animIn(q('.orbit'), { scale: 0.5, rotation: -120, opacity: 0 }, { duration: 1.2, ease: 'back.out(1.4)', delay: 0.2 })
+    animIn(q('.label'), { opacity: 0 }, { duration: 0.4, stagger: 0.05, delay: 0.9, clearProps: 'opacity' })
+    // กล่อง Toolbox ไหลเข้ามาจากด้านขวาทีละกล่อง
+    animIn(q('.tb-box'), { x: 80, opacity: 0 }, { duration: 0.7, ease: 'power3.out', stagger: 0.1, delay: 0.6 })
+  })
 
   const shownId = hover ?? pinned
   const current = skills.find((s) => s.id === shownId)
@@ -105,12 +122,13 @@ export default function Skills() {
   }, [])
 
   return (
-    <section className="page">
-      <h1 className="title">
-        <AnimatedLetters text="Skills" />
+    <section className="page fx-page" ref={root}>
+      <PageShapes shapes={SHAPES} />
+      <h1 className="title page-title">
+        <AnimatedLetters text="Skills" colorful />
       </h1>
-      <p className="sk-sub">Hover a skill to see how I use it. Click to keep it open.</p>
-      <ul className="sk-legend" aria-label="Skill groups">
+      <p className="sk-sub" data-intro>Hover a skill to see how I use it. Click to keep it open.</p>
+      <ul className="sk-legend" aria-label="Skill groups" data-intro>
         {groups.map((g) => (
           <li key={g.id} style={{ '--g': g.color } as CSSProperties}>{g.name}</li>
         ))}
@@ -197,8 +215,8 @@ export default function Skills() {
       </div>
 
       <section className="sk-section" aria-labelledby="toolbox-title">
-        <h2 id="toolbox-title" className="sk-h2">Toolbox</h2>
-        <p className="sk-note">Tools from my projects and coursework, by group.</p>
+        <h2 id="toolbox-title" className="sk-h2" data-intro>Toolbox</h2>
+        <p className="sk-note" data-intro>Tools from my projects and coursework, by group.</p>
         <div className={`tb-grid ${current ? 'has-sel' : ''}`}>
           {groups.map((g) => (
             <div
