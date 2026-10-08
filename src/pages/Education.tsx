@@ -29,7 +29,7 @@ const education: Item[] = [
   },
   {
     title: 'High School Diploma (Science-Mathematics Program)',
-    place: 'St.Mary School',
+    place: 'St.Mary School (Marialai School)',
     status: 'completed',
     period: 'Science-Mathematics Program',
     text: 'Focused on advanced mathematics and science, with a strong interest in computer programming and technology.',

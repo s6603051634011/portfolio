@@ -1,9 +1,11 @@
 import { useRef, useState, type FormEvent } from 'react'
 import emailjs from '@emailjs/browser'
 import { CircleMarker, MapContainer, Popup, TileLayer } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
 import AnimatedLetters from '../components/AnimatedLetters'
 import PageShapes, { type Shape } from '../components/PageShapes'
 import usePageIntro from '../hooks/usePageIntro'
+import { CV_URL, EMAIL } from '../links'
 
 const SHAPES: Shape[] = [
   { kind: 'plus', x: 1, y: 14, size: 28, color: 3, speed: -90 },
@@ -17,6 +19,13 @@ const POSITION: [number, number] = [13.8189, 100.514]
 export default function Contact() {
   const form = useRef<HTMLFormElement>(null)
   const [status, setStatus] = useState('')
+  const [copied, setCopied] = useState(false)
+  const copyEmail = () => {
+    navigator.clipboard?.writeText(EMAIL).then(
+      () => { setCopied(true); window.setTimeout(() => setCopied(false), 1600) },
+      () => {},
+    )
+  }
   const root = useRef<HTMLElement>(null)
   usePageIntro(root)
   // สีหมุดบนแผนที่ = สีหลักของธีม
@@ -50,9 +59,15 @@ export default function Contact() {
           <AnimatedLetters text="Contact me" colorful />
         </h1>
         <p data-intro>
-          I’m open to internship opportunities in Network Security. Send a message and I’ll
+          I’m looking for a security internship, in cybersecurity or network security. Send a message and I’ll
           reply as soon as I can.
         </p>
+
+        <div className="direct" data-intro>
+          <a className="direct-mail" href={`mailto:${EMAIL}`}>{EMAIL}</a>
+          <button type="button" className="direct-btn" onClick={copyEmail}>{copied ? 'COPIED' : 'COPY'}</button>
+          <a className="direct-btn" href={CV_URL} download>CV ↓</a>
+        </div>
 
         <form ref={form} onSubmit={send}>
           <input data-intro name="name" placeholder="Name" aria-label="Name" required />

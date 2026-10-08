@@ -10,15 +10,15 @@ const POKED = 'Okay, you can stop poking me :)'
 const LINES: Record<Variant, string[]> = {
   home: [
     'Hi, I’m Phimlaphat!',
-    'Looking for a cybersecurity internship.',
+    'Looking for a security internship.',
     'Take a look at my projects!',
     POKED,
   ],
   about: ['Hi! Nice to meet you.', 'I’m in my 4th year at KMUTNB.', POKED],
   skills: ['Hover a skill to see how I use it.', 'The orbit pauses while you read.', POKED],
   projects: ['Scroll down: each project stacks on the last.', 'Click a screenshot to open it full size.', POKED],
-  education: ['4th year, Computer Engineering at KMUTNB.', 'Looking for a cybersecurity internship.', POKED],
-  contact: ['Send a message and it lands in my inbox.', 'I’m looking for a cybersecurity internship.', POKED],
+  education: ['4th year, Computer Engineering at KMUTNB.', 'Looking for a security internship.', POKED],
+  contact: ['Send a message and it lands in my inbox.', 'I’m looking for a security internship.', POKED],
 }
 
 const SKIN = '#f7cfb0'
@@ -62,9 +62,10 @@ export default function Mascot({ variant = 'home', floating = false }: { variant
   const u = (n: string) => `url(#${id(n)})`
 
   const btnRef = useRef<HTMLButtonElement>(null)
-  const layers = useRef<Partial<Record<LayerKey, SVGGElement | null>>>({})
+  // เก็บ element ของแต่ละชั้นไว้ในออบเจ็กต์เดียวที่สร้างครั้งเดียว (ไม่ใช้ ref เพื่อให้ผ่านกฎ lint ของ React)
+  const [layers] = useState<Partial<Record<LayerKey, SVGGElement | null>>>(() => ({}))
   const set = (k: LayerKey) => (el: SVGGElement | null) => {
-    layers.current[k] = el
+    layers[k] = el
   }
 
   const [happy, setHappy] = useState(false)
@@ -83,7 +84,7 @@ export default function Mascot({ variant = 'home', floating = false }: { variant
   useEffect(() => {
     const btn = btnRef.current
     if (!btn) return
-    const L = layers.current
+    const L = layers
 
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
     let still = mq.matches
@@ -180,7 +181,7 @@ export default function Mascot({ variant = 'home', floating = false }: { variant
       document.documentElement.removeEventListener('pointerleave', onLeave)
       window.removeEventListener('blur', onLeave)
     }
-  }, [])
+  }, [layers]) // layers สร้างครั้งเดียว ไม่เปลี่ยน
 
   const greeting = said >= 0 ? lines[said] : lines[0]
   const shirt = { fill: 'var(--accent)' }

@@ -2,10 +2,23 @@
 <html lang="en" data-theme="warm">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500&family=La+Belle+Aurore&family=Bowlby+One&family=Caveat:wght@500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700&family=La+Belle+Aurore&family=Bowlby+One&family=Caveat:wght@500&display=swap" rel="stylesheet" />
     <title>Phimlaphat — Portfolio</title>
+    <!-- คำอธิบายสำหรับ Google และตอนแชร์ลิงก์ (LINE, LinkedIn, Facebook) -->
+    <meta name="description" content="Phimlaphat Machaopasuwan, 4th-year Computer Engineering student at KMUTNB, looking for a security internship in cybersecurity or network security. Projects: Thai tax invoice OCR, sports court booking app, NOC chatbot." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Phimlaphat — Portfolio" />
+    <meta property="og:description" content="Computer Engineering student at KMUTNB looking for a security internship. Projects, skills and contact." />
+    <!-- หลัง deploy ให้เปลี่ยน /og-image.png เป็นลิงก์เต็ม เช่น https://ชื่อเว็บ.vercel.app/og-image.png -->
+    <meta property="og:image" content="/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#fbf3e4" />
+    <script>
+      // ใช้ธีมที่ผู้ใช้เลือกไว้ครั้งก่อนตั้งแต่ก่อนหน้าเว็บขึ้น จะได้ไม่กะพริบ
+      try { var t = localStorage.getItem('theme'); if (t === 'warm' || t === 'night') document.documentElement.dataset.theme = t } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

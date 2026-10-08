@@ -4,6 +4,7 @@ import AnimatedLetters from '../components/AnimatedLetters'
 import Mascot from '../components/Mascot'
 import PageShapes, { type Shape } from '../components/PageShapes'
 import usePageIntro from '../hooks/usePageIntro'
+import { CV_URL } from '../links'
 
 const SHAPES: Shape[] = [
   { kind: 'star', x: 2, y: 16, size: 36, color: 4, speed: -60 },
@@ -14,7 +15,7 @@ const SHAPES: Shape[] = [
 ]
 
 // แต่ละบทบาทได้สีของตัวเอง
-const ROLES = ['Computer Engineering student', 'Cybersecurity intern candidate', 'Full-stack developer']
+const ROLES = ['Computer Engineering student', 'Security intern candidate', 'Full-stack developer']
 
 export default function Home() {
   const root = useRef<HTMLElement>(null)
@@ -40,7 +41,10 @@ export default function Home() {
             </span>
           ))}
         </p>
-        <Link to="/contact" className="btn" data-intro>CONTACT ME</Link>
+        <div className="hero-actions" data-intro>
+          <Link to="/contact" className="btn">CONTACT ME</Link>
+          <a href={CV_URL} className="btn btn-fill" download>DOWNLOAD CV</a>
+        </div>
       </div>
       <div data-reveal="pop">
         <Mascot />

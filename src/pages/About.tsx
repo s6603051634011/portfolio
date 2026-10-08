@@ -38,7 +38,7 @@ export default function About() {
           <HoverPreview
             to="/projects"
             title="Sports court booking app"
-            desc="Next.js + Firebase, team of 7. Click to see the project."
+            desc="Next.js + Firebase, team of 6. Click to see the project."
             image="/projects/booking-form.png"
           >
             booking app
@@ -55,7 +55,7 @@ export default function About() {
           . I’ve also done some hands-on electronics, including a power supply I built myself.
         </p>
         <p data-intro>
-          Right now I’m looking for a cybersecurity internship, and I’m studying the
+          Right now I’m looking for a security internship, in cybersecurity or network security, and I’m studying the
           fundamentals on my own, such as the OWASP Top 10.
         </p>
       </div>

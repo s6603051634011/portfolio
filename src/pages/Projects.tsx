@@ -23,7 +23,7 @@ type Project = {
 const projects: Project[] = [
   {
     title: 'Sports Court Booking',
-    blurb: 'A web app for booking sports courts, built with a team of seven.',
+    blurb: 'A web app for booking sports courts, built with a team of six.',
     points: [
       'Customers pick a court, a date within 7 days and a time slot, then upload a payment slip.',
       'Unpaid bookings expire after 15 minutes so slots are released automatically.',
