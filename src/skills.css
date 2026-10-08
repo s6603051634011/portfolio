@@ -96,3 +96,19 @@
 @media (max-width: 820px) {
   .sk-section { margin-top: 40px; }
 }
+
+/* ---------- จอกว้าง: วงโคจรซ้าย + Toolbox ขวา ---------- */
+.tb-box { transition: opacity .2s, transform .2s, box-shadow .2s; }
+.tb-grid.has-sel .tb-box:not(.on) { opacity: .45; }
+.tb-box.on { box-shadow: 4px 4px 0 var(--g); transform: translate(-2px, -2px); }
+
+@media (min-width: 1000px) {
+  .sk-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 40px; align-items: center; margin-top: 8px; }
+  .sk-stage { --size: min(600px, 52vw); margin: 0; justify-self: center; }
+  .sk-section { margin-top: 0; }
+  .sk-legend { display: none; } /* สีหมวดดูได้จาก Toolbox ข้างๆ แล้ว */
+  .tb-grid { grid-template-columns: 1fr; gap: 10px; }
+  .tb-box { border-top-width: 2px; border-left: 6px solid var(--g); padding: 10px 14px 12px; }
+  .tb-box h3 { margin-bottom: 8px; font-size: 12px; }
+  .tb-box li { font-size: 12px; padding: 2px 9px; }
+}

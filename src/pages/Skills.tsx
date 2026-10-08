@@ -116,6 +116,7 @@ export default function Skills() {
         ))}
       </ul>
 
+      <div className="sk-layout">
       <div className="sk-stage">
         <div className={`orbit ${current ? 'has-sel' : ''}`} onClick={clearAll}>
           <div className="ring" />
@@ -198,9 +199,13 @@ export default function Skills() {
       <section className="sk-section" aria-labelledby="toolbox-title">
         <h2 id="toolbox-title" className="sk-h2">Toolbox</h2>
         <p className="sk-note">Tools from my projects and coursework, by group.</p>
-        <div className="tb-grid">
+        <div className={`tb-grid ${current ? 'has-sel' : ''}`}>
           {groups.map((g) => (
-            <div className="tb-box" key={g.id} style={{ '--g': g.color } as CSSProperties}>
+            <div
+              className={`tb-box ${current?.group === g.id ? 'on' : ''}`}
+              key={g.id}
+              style={{ '--g': g.color } as CSSProperties}
+            >
               <h3>{g.name}</h3>
               <ul>
                 {g.tools.map((t) => (
@@ -211,7 +216,7 @@ export default function Skills() {
           ))}
         </div>
       </section>
-
+      </div>
     </section>
   )
 }
