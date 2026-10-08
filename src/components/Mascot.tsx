@@ -4,12 +4,22 @@ import '../mascot.css'
 /* ปรับจากคอมโพเนนต์ตัวอย่าง: ตัวการ์ตูน SVG ที่หันหน้าตามเมาส์ กะพริบตา
    และพูดเมื่อคลิก เปลี่ยนเป็นตัวละครผู้หญิง และใช้สีตามธีมของเว็บ */
 
-const GREETINGS = [
-  'Hi, I’m Phimlaphat!',
-  'Looking for a cybersecurity internship.',
-  'Take a look at my projects!',
-  'Okay, you can stop poking me :)',
-]
+export type Variant = 'home' | 'about' | 'skills' | 'projects' | 'education' | 'contact'
+
+const POKED = 'Okay, you can stop poking me :)'
+const LINES: Record<Variant, string[]> = {
+  home: [
+    'Hi, I’m Phimlaphat!',
+    'Looking for a cybersecurity internship.',
+    'Take a look at my projects!',
+    POKED,
+  ],
+  about: ['Hi! Nice to meet you.', 'I’m in my 4th year at KMUTNB.', POKED],
+  skills: ['Hover a skill to see how I use it.', 'The orbit pauses while you read.', POKED],
+  projects: ['Scroll down: each project stacks on the last.', 'Click a screenshot to open it full size.', POKED],
+  education: ['4th year, Computer Engineering at KMUTNB.', 'Looking for a cybersecurity internship.', POKED],
+  contact: ['Send a message and it lands in my inbox.', 'I’m looking for a cybersecurity internship.', POKED],
+}
 
 const SKIN = '#f7cfb0'
 const HAIR = '#2e1b14'
@@ -45,7 +55,8 @@ type LayerKey =
   | 'hairBack' | 'body' | 'head' | 'earL' | 'earR' | 'hair'
   | 'blush' | 'face' | 'nose' | 'eyes' | 'brows'
 
-export default function Mascot() {
+export default function Mascot({ variant = 'home', floating = false }: { variant?: Variant; floating?: boolean }) {
+  const lines = LINES[variant]
   const uid = useId().replace(/:/g, '')
   const id = (n: string) => n + uid
   const u = (n: string) => `url(#${id(n)})`
@@ -61,7 +72,7 @@ export default function Mascot() {
   const happyTimer = useRef<number | undefined>(undefined)
 
   const poke = () => {
-    setSaid((n) => (n + 1) % GREETINGS.length)
+    setSaid((n) => (n + 1) % lines.length)
     setHappy(true)
     window.clearTimeout(happyTimer.current)
     happyTimer.current = window.setTimeout(() => setHappy(false), 2200)
@@ -171,11 +182,11 @@ export default function Mascot() {
     }
   }, [])
 
-  const greeting = said >= 0 ? GREETINGS[said] : GREETINGS[0]
+  const greeting = said >= 0 ? lines[said] : lines[0]
   const shirt = { fill: 'var(--accent)' }
 
   return (
-    <button ref={btnRef} type="button" className="mc" onClick={poke} aria-label="Say hi to the character">
+    <button ref={btnRef} type="button" className={`mc ${floating ? 'mc-float' : ''}`} onClick={poke} aria-label="Say hi to the character">
       <svg viewBox="0 0 600 720" aria-hidden="true">
         <defs>
           <radialGradient id={id('shade')} cx="46%" cy="40%" r="62%">
@@ -243,6 +254,25 @@ export default function Mascot() {
             {/* ปอยผมพาดหน้าไหล่ */}
             <path d="M142 470 C118 560 120 650 140 730 L196 730 C186 640 196 560 226 506 Z" fill={HAIR} />
             <path d="M458 470 C482 560 480 650 460 730 L404 730 C414 640 404 560 374 506 Z" fill={HAIR} />
+            {variant === 'about' && (
+              <g className="mc-hand">
+                <rect x="491" y="500" width="56" height="240" rx="28" fill={SKIN} />
+                <ellipse cx="519" cy="492" rx="40" ry="44" fill={SKIN} />
+                <ellipse cx="490" cy="448" rx="11" ry="34" fill={SKIN} transform="rotate(-12 490 448)" />
+                <ellipse cx="510" cy="438" rx="11" ry="38" fill={SKIN} transform="rotate(-4 510 438)" />
+                <ellipse cx="531" cy="438" rx="11" ry="38" fill={SKIN} transform="rotate(4 531 438)" />
+                <ellipse cx="551" cy="448" rx="11" ry="34" fill={SKIN} transform="rotate(12 551 448)" />
+                <ellipse cx="475" cy="505" rx="12" ry="28" fill={SKIN} transform="rotate(-40 475 505)" />
+                <rect x="481" y="620" width="76" height="130" rx="14" style={shirt} />
+              </g>
+            )}
+            {variant === 'projects' && (
+              <g>
+                <rect x="140" y="618" width="320" height="140" rx="16" fill="#2a2a30" />
+                <rect x="140" y="618" width="320" height="140" rx="16" fill="none" stroke="#fff" strokeOpacity="0.12" strokeWidth="3" />
+                <circle cx="300" cy="676" r="16" style={shirt} />
+              </g>
+            )}
           </g>
 
           <g ref={set('head')}>
@@ -294,6 +324,15 @@ export default function Mascot() {
                 )}
               </g>
 
+              {variant === 'skills' && (
+                <g fill="#fff" fillOpacity="0.1" stroke="#25252b" strokeWidth="7" strokeLinecap="round">
+                  <circle cx="240" cy="350" r="46" />
+                  <circle cx="360" cy="350" r="46" />
+                  <path d="M286 346 Q300 334 314 346" fill="none" />
+                  <path d="M194 344 L152 330 M406 344 L448 330" fill="none" />
+                </g>
+              )}
+
               <path d="M420 382 L423.5 391 L433 391.5 L425.6 397.5 L428.2 406.8 L420 401.5 L411.8 406.8 L414.4 397.5 L407 391.5 L416.5 391 Z" fill="#2a1a14" />
 
               <g transform={happy ? 'translate(300 440) scale(1.06 1.12) translate(-300 -440)' : undefined}>
@@ -320,6 +359,24 @@ export default function Mascot() {
               <path d="M128 350 C108 190 190 104 300 104 C410 104 492 190 472 350 C462 300 448 262 420 238 C380 270 320 262 276 226 C250 262 196 284 150 292 C140 308 132 328 128 350 Z" fill={HAIR} />
               <path d="M128 350 C108 190 190 104 300 104 C410 104 492 190 472 350 C462 300 448 262 420 238 C380 270 320 262 276 226 C250 262 196 284 150 292 C140 308 132 328 128 350 Z" fill={u('hairlit')} />
               <path d="M200 150 Q300 104 400 150" fill="none" stroke="#fff" strokeOpacity="0.16" strokeWidth="8" strokeLinecap="round" />
+              {variant === 'education' && (
+                <g>
+                  <path d="M205 128 V176 C205 198 395 198 395 176 V128 Z" fill="#24242a" />
+                  <path d="M300 60 L486 114 L300 168 L114 114 Z" fill="#2e2e36" stroke="#fff" strokeOpacity="0.15" strokeWidth="3" strokeLinejoin="round" />
+                  <circle cx="300" cy="114" r="9" style={shirt} />
+                  <path d="M300 114 L452 124 V196" fill="none" strokeWidth="5" strokeLinecap="round" style={{ stroke: 'var(--accent)' }} />
+                  <rect x="444" y="196" width="16" height="36" rx="6" style={shirt} />
+                </g>
+              )}
+              {variant === 'contact' && (
+                <g>
+                  <path d="M138 330 C130 40 470 40 462 330" fill="none" stroke="#26262c" strokeWidth="13" strokeLinecap="round" />
+                  <rect x="108" y="312" width="48" height="92" rx="22" style={shirt} stroke="#000" strokeOpacity="0.3" strokeWidth="3" />
+                  <rect x="444" y="312" width="48" height="92" rx="22" style={shirt} stroke="#000" strokeOpacity="0.3" strokeWidth="3" />
+                  <path d="M132 400 C126 478 168 522 214 514" fill="none" stroke="#26262c" strokeWidth="7" strokeLinecap="round" />
+                  <ellipse cx="222" cy="514" rx="18" ry="12" fill="#26262c" />
+                </g>
+              )}
             </g>
           </g>
         </g>

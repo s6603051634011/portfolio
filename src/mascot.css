@@ -1,4 +1,4 @@
-/* Mascot (ตัวการ์ตูนบนหน้า Home) */
+/* Mascot (ตัวการ์ตูนบนหน้า Home และมาสคอตมุมจอของหน้าอื่น) */
 .mc {
   position: relative; display: block; width: min(520px, 100%); aspect-ratio: 600 / 720;
   margin: 0 auto; padding: 0; border: 0; background: none; cursor: pointer;
@@ -16,9 +16,28 @@
   transition: transform .45s cubic-bezier(.3, 1.6, .5, 1), opacity .2s;
 }
 .mc-bubble[data-on='true'] { transform: scale(1) rotate(-4deg); opacity: 1; }
+
+/* มาสคอตมุมขวาล่าง ลอยติดขอบล่างของจอ */
+.mc-float {
+  position: fixed; right: 16px; bottom: 0; z-index: 40; width: 150px; margin: 0;
+  animation: mc-in .6s cubic-bezier(.3, 1.4, .5, 1) both;
+}
+@keyframes mc-in { from { transform: translateY(100%); } to { transform: none; } }
+.mc-float .mc-bubble {
+  left: auto; right: 88%; top: 4%; width: 210px; max-width: none;
+  border-radius: 18px 18px 4px 18px; transform-origin: 100% 100%;
+}
+/* จอแคบกว่านี้มาสคอตจะทับเนื้อหา จึงซ่อนไว้ */
+@media (max-width: 1360px) { .mc-float { display: none; } }
+
+/* มือที่โบก (หน้า About) */
+.mc-hand { transform-box: fill-box; transform-origin: 50% 85%; animation: mc-wave 1.4s ease-in-out infinite alternate; }
+@keyframes mc-wave { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
+
 @media (max-width: 820px) {
   .mc { order: -1; width: min(320px, 80%); }
 }
 @media (prefers-reduced-motion: reduce) {
   .mc-bubble { transition: none; }
+  .mc-hand, .mc-float { animation: none; }
 }

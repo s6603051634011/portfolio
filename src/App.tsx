@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar'
+import MascotGuide from './components/MascotGuide'
 import Loader from './components/Loader'
 import Home from './pages/Home'
 import About from './pages/About'
@@ -22,6 +23,7 @@ export default function App() {
     <>
       {loading && <Loader />}
       <Navbar />
+      {!loading && <MascotGuide />}
       <main>
         {!loading && (
           <Routes>
