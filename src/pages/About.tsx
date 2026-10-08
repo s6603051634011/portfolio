@@ -1,6 +1,6 @@
 import AnimatedLetters from '../components/AnimatedLetters'
 import HoverPreview from '../components/HoverPreview'
-import '../about.css'
+import PortraitCutout from '../components/PortraitCutout'
 
 export default function About() {
   return (
@@ -46,9 +46,7 @@ export default function About() {
         </p>
       </div>
 
-      <figure className="about-photo">
-        <img src="/about/portrait.jpg" alt="Portrait of Phimlaphat" />
-      </figure>
+      <PortraitCutout />
     </section>
   )
 }
