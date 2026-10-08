@@ -1,24 +1,111 @@
-/* สไลด์ภาพหน้าจอมือถือ: เลื่อนทีละภาพได้ (ปัด, ปุ่ม, หรือ scroll) */
-.pc { margin-bottom: 20px; }
-.pc-track {
-  display: flex; gap: 16px; width: fit-content; max-width: 100%; margin-inline: auto;
-  overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 8px 14px; scrollbar-width: thin;
+/* Education page: การ์ดหลากสี + เส้น timeline ไล่สี + รูปทรง parallax + แถบตัวหนังสือวิ่ง
+   แอนิเมชันหลักอยู่ใน pages/Education.tsx (gsap + ScrollTrigger) */
+.edu { position: relative; }
+.bg-title { font-size: clamp(34px, 5vw, 68px); margin: 8px 0 0; position: relative; z-index: 1; }
+.bg-sub { color: var(--muted); margin: 14px 0 48px; font-size: 15px; position: relative; z-index: 1; }
+
+/* ---------- รูปทรงตกแต่งพื้นหลัง ---------- */
+.edu-shapes { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.edu-shape { position: absolute; display: block; }
+.edu-shape::before { content: ''; position: absolute; inset: 0; animation: edu-float 7s ease-in-out infinite; animation-delay: var(--d); }
+.s-ring::before { border: 10px solid var(--sc); border-radius: 50%; opacity: .55; }
+.s-dot::before { background: var(--sc); border-radius: 50%; opacity: .7; }
+.s-star::before {
+  background: var(--sc); opacity: .6;
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation-name: edu-spin; animation-duration: 18s; animation-timing-function: linear;
 }
-.pc-track:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 12px; }
-.pc-slide { flex: 0 0 auto; width: min(260px, 72vw); margin: 0; scroll-snap-align: start; }
-.pc-slide img {
-  display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover; object-position: top;
-  background: var(--surface); border: 3px solid var(--line); border-radius: 28px;
-  box-shadow: 5px 5px 0 var(--accent-shadow);
+.s-squig::before {
+  opacity: .55;
+  background: var(--sc);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Cpath d='M4 20 Q16 4 28 20 T52 20 T76 20 T100 20' fill='none' stroke='black' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Cpath d='M4 20 Q16 4 28 20 T52 20 T76 20 T100 20' fill='none' stroke='black' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
 }
-.pc-slide figcaption { color: var(--muted); font-size: 12px; text-align: center; margin-top: 10px; }
-.pc-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 4px; }
-.pc-btn {
-  width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 18px;
-  background: none; color: var(--text); border: 2px solid var(--line);
+@keyframes edu-float { 50% { transform: translateY(-14px) rotate(8deg); } }
+@keyframes edu-spin { to { transform: rotate(360deg); } }
+
+/* ---------- Timeline ---------- */
+.timeline { position: relative; z-index: 1; max-width: 780px; display: grid; gap: 28px; padding: 4px 0 4px 40px; }
+.timeline::before, .timeline-fill { /* เส้นจาง + เส้นไล่สีที่ยาวลงตามการเลื่อน */
+  content: ''; position: absolute; left: 9px; top: 0; bottom: 0; width: 4px; border-radius: 2px;
 }
-.pc-btn:hover:not(:disabled), .pc-btn:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
-.pc-btn:disabled { opacity: .35; cursor: default; }
-.pc-dots { display: flex; gap: 8px; }
-.pc-dot { width: 10px; height: 10px; padding: 0; border-radius: 50%; border: 2px solid var(--line); background: none; cursor: pointer; }
-.pc-dot.on { background: var(--accent); border-color: var(--accent); }
+.timeline::before { background: var(--line); opacity: .25; }
+.timeline-fill {
+  background: linear-gradient(var(--c1), var(--c4), var(--c3), var(--c6), var(--c2), var(--c5));
+  transform-origin: top;
+}
+.t-item { position: relative; }
+.t-dot {
+  position: absolute; left: -40px; top: 26px; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--ic); border: 4px solid var(--bg); box-shadow: 0 0 0 2px var(--ic);
+}
+.t-dot::after { /* วงคลื่นกระเพื่อม */
+  content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid var(--ic);
+  animation: edu-ping 2.2s ease-out infinite;
+}
+@keyframes edu-ping { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(1.8); opacity: 0; } }
+
+/* ---------- การ์ด ---------- */
+.t-card {
+  position: relative; overflow: hidden;
+  display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 18px;
+  background: var(--surface); color: var(--surface-text);
+  border: 2px solid var(--line); border-radius: 18px; padding: 22px 22px 22px 20px;
+  box-shadow: 6px 6px 0 var(--ic);
+  transition: box-shadow .25s, border-color .25s;
+}
+.t-card::before { /* แถบสีวิ่งด้านบน */
+  content: ''; position: absolute; left: 0; right: 0; top: 0; height: 5px;
+  background: linear-gradient(90deg, var(--ic), var(--c5), var(--c4), var(--ic));
+  background-size: 200% 100%; animation: edu-slide 4s linear infinite;
+}
+@keyframes edu-slide { to { background-position: -200% 0; } }
+.t-card:hover { border-color: var(--ic); box-shadow: 10px 10px 0 var(--ic); }
+
+.t-icon {
+  width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center;
+  background: var(--ic); color: var(--surface);
+}
+.t-card:hover .t-icon { animation: edu-wiggle .6s ease-in-out; }
+@keyframes edu-wiggle { 25% { transform: rotate(-12deg) scale(1.08); } 75% { transform: rotate(10deg) scale(1.08); } }
+
+.t-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.t-top h3 { margin: 0; font-size: 18px; line-height: 1.3; }
+.badge {
+  flex: none; display: inline-flex; align-items: center; gap: 6px;
+  font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  background: var(--ic); color: var(--surface); border-radius: 999px; padding: 4px 10px;
+}
+.badge:not(.done)::before { /* จุดกะพริบ = กำลังเรียนอยู่ */
+  content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--surface);
+  animation: edu-blink 1.4s ease-in-out infinite;
+}
+@keyframes edu-blink { 50% { opacity: .2; } }
+.badge.done { background: none; color: var(--muted); border: 1px solid var(--line); }
+.t-place { color: var(--text-soft); margin: 6px 0 0; font-size: 14px; }
+.t-period { color: var(--ic); margin: 8px 0 0; font-size: 12px; font-weight: 700; letter-spacing: .08em; }
+.t-text { color: var(--text-soft); margin: 12px 0 0; font-size: 14px; line-height: 1.65; }
+
+/* ---------- แถบตัวหนังสือวิ่ง (กว้างเต็มจอ ตัดส่วนที่เอียงล้นออก) ---------- */
+.ribbon-wrap { width: 100vw; margin: 40px 0 0 calc(50% - 50vw); padding-block: 24px; overflow: hidden; }
+.ribbon {
+  position: relative; z-index: 1; width: 110%; margin-left: -5%; padding: 14px 0; overflow: hidden;
+  background: var(--panel); border-block: 2px solid var(--line); transform: rotate(-2deg);
+}
+.rb-track { display: flex; width: max-content; }
+.rb-track span {
+  display: flex; align-items: center; gap: 22px; padding-right: 22px; white-space: nowrap;
+  font-family: var(--font-display); font-size: clamp(20px, 2.6vw, 30px); color: var(--rc);
+}
+.rb-track span::after { content: '✦'; font-size: .6em; color: var(--text); opacity: .5; }
+
+@media (max-width: 820px) {
+  .timeline { padding-left: 32px; }
+  .t-dot { left: -32px; width: 18px; height: 18px; }
+  .t-card { grid-template-columns: 1fr; }
+  .edu-shape.s-ring, .edu-shape.s-squig { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edu-shape::before, .t-dot::after, .t-card::before, .badge::before { animation: none; }
+}

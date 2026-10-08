@@ -1,6 +1,10 @@
-import type { ReactNode } from 'react'
+import { useLayoutEffect, useRef, type CSSProperties, type PointerEvent, type ReactNode } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import AnimatedLetters from '../components/AnimatedLetters'
 import '../education.css'
+
+gsap.registerPlugin(ScrollTrigger)
 
 type Item = {
   title: string
@@ -8,24 +12,11 @@ type Item = {
   status: 'present' | 'completed'
   period?: string // ใส่ช่วงเวลาเองได้ เช่น '2023 – Present'
   text: string
+  color: string // สีประจำการ์ด (จากธีม --c1..--c6)
+  icon: 'cap' | 'book'
 }
 
 // เพิ่มการ์ดใหม่ได้โดยคัดลอกก้อน { ... } แล้วแก้ข้อความ
-const experience: Item[] = [
-  {
-    title: 'Senior Thesis: Thai Tax Invoice OCR',
-    place: 'KMUTNB · two-person thesis',
-    status: 'present', // เปลี่ยนเป็น 'completed' เมื่อเสร็จแล้ว
-    text: 'Building a Python pipeline with Typhoon-OCR 1.5 (2B) that extracts structured data from Thai tax invoices, designed to run on-premise.',
-  },
-  {
-    title: 'Sports Court Booking Web App',
-    place: 'Team project · 7 people',
-    status: 'completed',
-    text: 'Booking app with Next.js and Firebase: a 15-minute payment window, Firestore transactions to prevent double booking, and a staff dashboard.',
-  },
-]
-
 const education: Item[] = [
   {
     title: 'Electronics Engineering Technology (Computer)',
@@ -33,39 +24,139 @@ const education: Item[] = [
     status: 'present',
     period: 'Electronics Engineering Technology (Computer) · 4th year',
     text: 'Specializing in Computer Engineering, with hands-on software projects and a focus on cybersecurity.',
+    color: 'var(--c2)',
+    icon: 'cap',
   },
   {
     title: 'High School Diploma (Science-Mathematics Program)',
-    place: "St.Mary School",
+    place: 'St.Mary School',
     status: 'completed',
     period: 'Science-Mathematics Program',
     text: 'Focused on advanced mathematics and science, with a strong interest in computer programming and technology.',
+    color: 'var(--c3)',
+    icon: 'book',
   },
 ]
 
-const Briefcase = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <rect x="3" y="7" width="18" height="13" rx="2" /><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><path d="M3 13h18" />
+// คำที่วิ่งในแถบด้านล่าง (ดึงจากข้อมูลด้านบน)
+const ribbon = ['KMUTNB', 'Electronics Engineering', 'St.Mary School', 'Science-Mathematics']
+
+const Cap = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M2 9l10-5 10 5-10 5z" /><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5" /><path d="M22 9v6" />
   </svg>
 )
 const Book = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4z" /><path d="M5 17a3 3 0 0 1 3-3h11" />
   </svg>
 )
+const ICONS: Record<Item['icon'], ReactNode> = { cap: <Cap />, book: <Book /> }
 
-function Column({ label, icon, items }: { label: string; icon: ReactNode; items: Item[] }) {
+// รูปทรงตกแต่งพื้นหลัง: [ชนิด, ตำแหน่ง x %, y %, ขนาด px, สี, ความเร็ว parallax]
+const SHAPES: [string, number, number, number, string, number][] = [
+  ['ring', 84, 20, 90, 'var(--c1)', -80],
+  ['dot', 92, 38, 26, 'var(--c4)', -160],
+  ['star', 70, 62, 44, 'var(--c5)', -60],
+  ['squig', 88, 82, 110, 'var(--c6)', -120],
+  ['dot', 4, 92, 18, 'var(--c2)', -200],
+]
+
+export default function Education() {
+  const root = useRef<HTMLElement>(null)
+
+  useLayoutEffect(() => {
+    const mm = gsap.matchMedia()
+    // ผู้ใช้ที่ไม่ได้ปิดแอนิเมชันในระบบเท่านั้น
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const q = gsap.utils.selector(root)
+
+      // หัวข้อ: ตัวอักษรตกลงมาทีละตัว
+      gsap.from(q('.bg-title .letter'), {
+        y: -70, rotation: () => gsap.utils.random(-40, 40), opacity: 0,
+        duration: 0.8, ease: 'back.out(2)', stagger: 0.05,
+      })
+      gsap.from(q('.bg-sub'), { y: 16, opacity: 0, duration: 0.6, delay: 0.5 })
+
+      // เส้น timeline ค่อยๆ ยาวลงตามการเลื่อน
+      gsap.fromTo(q('.timeline-fill'), { scaleY: 0 }, {
+        scaleY: 1, ease: 'none',
+        scrollTrigger: { trigger: q('.timeline')[0], start: 'top 75%', end: 'bottom 60%', scrub: 0.6 },
+      })
+
+      // การ์ด: สไลด์เข้าจากด้านขวาสลับซ้าย หมุนนิดๆ จุดบนเส้นเด้งตาม
+      q('.t-item').forEach((item, i) => {
+        const tl = gsap.timeline({ scrollTrigger: { trigger: item, start: 'top 88%' } })
+        tl.from(item.querySelector('.t-card'), {
+          x: i % 2 ? -120 : 120, rotation: i % 2 ? -4 : 4, opacity: 0, duration: 0.9, ease: 'power3.out',
+        })
+          .from(item.querySelector('.t-dot'), { scale: 0, duration: 0.5, ease: 'back.out(3)' }, '-=0.6')
+          .from(item.querySelector('.t-icon'), { rotation: -180, scale: 0.4, duration: 0.6, ease: 'back.out(2)' }, '-=0.5')
+      })
+
+      // รูปทรงพื้นหลัง: เลื่อนด้วยความเร็วต่างกัน (parallax)
+      q('.edu-shape').forEach((el) => {
+        gsap.to(el, {
+          y: Number((el as HTMLElement).dataset.speed), ease: 'none',
+          scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true },
+        })
+      })
+
+      // แถบตัวหนังสือวิ่ง: เลื่อนหน้าเร็ว แถบก็วิ่งเร็วตาม และกลับทิศตามทิศการเลื่อน
+      const track = q('.rb-track')[0]
+      const loop = gsap.to(track, { xPercent: -50, duration: 22, ease: 'none', repeat: -1 })
+      loop.totalTime(22 * 50) // เริ่มกลางๆ เพื่อให้วิ่งถอยหลังได้ไม่สะดุด
+      ScrollTrigger.create({
+        trigger: root.current, start: 'top top', end: 'bottom bottom',
+        onUpdate: (self) => {
+          const boost = gsap.utils.clamp(1, 6, Math.abs(self.getVelocity()) / 300)
+          gsap.to(loop, {
+            timeScale: self.direction * boost, duration: 0.2, overwrite: true,
+            onComplete: () => { gsap.to(loop, { timeScale: self.direction, duration: 1 }) },
+          })
+        },
+      })
+    })
+    return () => mm.revert()
+  }, [])
+
+  // การ์ดเอียงตามเมาส์ (ใช้ gsap เพื่อไม่ให้ตีกับแอนิเมชันตอนเข้า)
+  const tilt = (e: PointerEvent<HTMLElement>) => {
+    if (e.pointerType !== 'mouse' || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const r = e.currentTarget.getBoundingClientRect()
+    const x = (e.clientX - r.left) / r.width - 0.5
+    const y = (e.clientY - r.top) / r.height - 0.5
+    gsap.to(e.currentTarget, { rotationX: -y * 6, rotationY: x * 8, transformPerspective: 900, duration: 0.4, ease: 'power2.out' })
+  }
+  const untilt = (e: PointerEvent<HTMLElement>) => {
+    gsap.to(e.currentTarget, { rotationX: 0, rotationY: 0, duration: 0.6, ease: 'power2.out' })
+  }
+
   return (
-    <div>
-      <div className="col-head">
-        {icon}
-        <h2>{label}</h2>
+    <section className="page edu" ref={root}>
+      <div className="edu-shapes" aria-hidden="true">
+        {SHAPES.map(([kind, x, y, size, color, speed], i) => (
+          <span
+            key={i}
+            className={`edu-shape s-${kind}`}
+            data-speed={speed}
+            style={{ left: `${x}%`, top: `${y}%`, width: size, height: size, '--sc': color, '--d': `${i * 0.7}s` } as CSSProperties}
+          />
+        ))}
       </div>
+
+      <h1 className="bg-title">
+        <AnimatedLetters text="Education." colorful />
+      </h1>
+      <p className="bg-sub">Where I have studied.</p>
+
       <div className="timeline">
-        {items.map((it) => (
-          <div className="t-item" key={it.title}>
-            <article className="t-card">
-              <div className="t-icon">{icon}</div>
+        <span className="timeline-fill" aria-hidden="true" />
+        {education.map((it) => (
+          <div className="t-item" key={it.title} style={{ '--ic': it.color } as CSSProperties}>
+            <span className="t-dot" aria-hidden="true" />
+            <article className="t-card" onPointerMove={tilt} onPointerLeave={untilt}>
+              <div className="t-icon">{ICONS[it.icon]}</div>
               <div>
                 <div className="t-top">
                   <h3>{it.title}</h3>
@@ -79,22 +170,19 @@ function Column({ label, icon, items }: { label: string; icon: ReactNode; items:
           </div>
         ))}
       </div>
-    </div>
-  )
-}
 
-export default function Education() {
-  return (
-    <section className="page">
-      <h1 className="bg-title">
-        <AnimatedLetters text="Education & " />
-        <AnimatedLetters text="Experience." className="accent" />
-      </h1>
-      <p className="bg-sub">A journey of learning and building.</p>
-
-      <div className="bg-grid">
-        <Column label="Experience" icon={<Briefcase />} items={experience} />
-        <Column label="Education" icon={<Book />} items={education} />
+      <div className="ribbon-wrap" aria-hidden="true">
+      <div className="ribbon">
+        <div className="rb-track">
+          {[0, 1].map((copy) =>
+            ribbon.map((w, i) => (
+              <span key={`${copy}-${i}`} style={{ '--rc': `var(--c${(i % 6) + 1})` } as CSSProperties}>
+                {w}
+              </span>
+            ))
+          )}
+        </div>
+      </div>
       </div>
     </section>
   )
