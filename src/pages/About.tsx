@@ -1,7 +1,6 @@
 import AnimatedLetters from '../components/AnimatedLetters'
 import HoverPreview from '../components/HoverPreview'
-
-const faces = ['Python', 'TypeScript', 'Next.js', 'Firebase', 'OCR', 'Security']
+import '../about.css'
 
 export default function About() {
   return (
@@ -12,44 +11,44 @@ export default function About() {
         </h1>
 
         <p>
-          I’m a 4th-year Electronics and Computer Engineering student at KMUTNB,
-          specializing in Computer Engineering, and I’m looking for a cybersecurity internship.
+          I’m Phimlaphat, a 4th-year Electronics and Computer Engineering student at KMUTNB,
+          specializing in Computer Engineering.
         </p>
         <p>
-          I build software in Python and TypeScript, mostly with Next.js and Firebase.
-          My senior thesis is an{' '}
-          <HoverPreview
-            to="/projects"
-            title="Thai tax invoice OCR"
-            desc="Senior thesis: Typhoon-OCR + QLoRA, running on-premise. Click to see the project."
-            image="/projects/ocr-compare.jpg"
-          >
-            on-premise OCR pipeline
-          </HoverPreview>{' '}
-          that extracts data from Thai tax invoices, and I worked with a team of seven on a{' '}
+          I learn best by reading a topic until it makes sense and then practicing with
+          exercises or old exams. When I really want to remember something, I explain it to
+          a friend.
+        </p>
+        <p>
+          Most of my work so far is software, like a{' '}
           <HoverPreview
             to="/projects"
             title="Sports court booking app"
             desc="Next.js + Firebase, team of 7. Click to see the project."
             image="/projects/booking-form.png"
           >
-            sports court booking web app
+            booking app
+          </HoverPreview>{' '}
+          I built with my team and my{' '}
+          <HoverPreview
+            to="/projects"
+            title="Thai tax invoice OCR"
+            desc="Senior thesis: Typhoon-OCR + QLoRA, running on-premise. Click to see the project."
+            image="/projects/ocr-compare.jpg"
+          >
+            thesis on reading Thai tax invoices
           </HoverPreview>
-          .
+          . I’ve also done some hands-on electronics, including a power supply I built myself.
         </p>
         <p>
-          I’m learning security from the ground up: how systems break, and how to build
-          them so they don’t.
+          Right now I’m looking for a cybersecurity internship, and I’m studying the
+          fundamentals on my own, such as the OWASP Top 10.
         </p>
       </div>
 
-      <div className="stage" aria-label={`Skills: ${faces.join(', ')}`}>
-        <div className="cube">
-          {faces.map((f) => (
-            <div key={f}>{f}</div>
-          ))}
-        </div>
-      </div>
+      <figure className="about-photo">
+        <img src="/about/portrait.jpg" alt="Portrait of Phimlaphat" />
+      </figure>
     </section>
   )
 }
