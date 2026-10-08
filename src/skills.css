@@ -30,8 +30,9 @@
   position: absolute; left: -26px; top: -26px; width: 52px; height: 52px; border-radius: 50%;
   display: grid; place-items: center; cursor: pointer;
   background: var(--panel); color: var(--text); border: 2px solid var(--line);
-  font: 700 14px var(--font-display); transition: transform .2s, background .2s, color .2s, border-color .2s;
+  font: 700 15px Archivo, 'Helvetica Neue', Arial, sans-serif; letter-spacing: .02em; transition: transform .2s, background .2s, color .2s, border-color .2s;
 }
+.node { border-color: var(--g, var(--line)); border-width: 3px; }
 .node:hover, .node:focus-visible { border-color: var(--accent); outline: none; transform: scale(1.1); }
 .node.active { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); transform: scale(1.2); box-shadow: 4px 4px 0 var(--accent-shadow); }
 .label {
@@ -70,4 +71,28 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .orb { animation: none; } /* วงหมุนช้ามากและหยุดได้เอง จึงไม่ปิดการหมุน */
+}
+
+/* ---------- หมวดสี (legend) ---------- */
+.sk-legend { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 18px; margin: -6px 0 8px; padding: 0; }
+.sk-legend li { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--text-soft); }
+.sk-legend li::before { content: ''; width: 11px; height: 11px; border-radius: 50%; background: var(--g); }
+
+/* ---------- Toolbox ---------- */
+.sk-section { margin-top: 56px; max-width: 1040px; }
+.sk-h2 { font-family: var(--font-display); font-weight: 400; color: var(--accent); font-size: clamp(22px, 2.6vw, 30px); margin: 0; }
+.sk-note { color: var(--muted); font-size: 15px; margin: 6px 0 20px; }
+
+.tb-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+.tb-box {
+  background: var(--surface); color: var(--surface-text);
+  border: 2px solid var(--line); border-top: 6px solid var(--g); border-radius: 14px; padding: 14px 16px 16px;
+}
+.tb-box h3 { margin: 0 0 10px; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+.tb-box ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.tb-box li { font-size: 13px; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; }
+
+
+@media (max-width: 820px) {
+  .sk-section { margin-top: 40px; }
 }

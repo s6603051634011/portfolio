@@ -2,8 +2,10 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import AnimatedLetters from '../components/AnimatedLetters'
 import '../skills.css'
 
+type GroupId = 'lang' | 'web' | 'ai' | 'sys' | 'hw'
 type Skill = {
   id: string
+  group: GroupId
   name: string
   short: string // ตัวย่อในวงกลม
   status: 'core' | 'learning'
@@ -12,49 +14,59 @@ type Skill = {
   links: string[] // id ของทักษะที่เกี่ยวข้อง
 }
 
+// หมวดทักษะ: สีของวงในวงโคจร + กล่องใน Toolbox (สีมาจากธีม --c1..--c5)
+const groups: { id: GroupId; name: string; color: string; tools: string[] }[] = [
+  { id: 'lang', name: 'Languages', color: 'var(--c1)', tools: ['Python', 'TypeScript', 'Dart'] },
+  { id: 'web', name: 'Web & Mobile', color: 'var(--c2)', tools: ['React', 'Next.js', 'Vite', 'Tailwind CSS', 'Flutter', 'Firebase Firestore', 'Jest'] },
+  { id: 'ai', name: 'AI & Data', color: 'var(--c3)', tools: ['Typhoon-OCR', 'QLoRA', 'Qwen2.5-VL', 'Ollama', 'Function calling', 'NumPy', 'Streamlit'] },
+  { id: 'sys', name: 'Systems & Tools', color: 'var(--c4)', tools: ['Linux', 'SSH (Paramiko)', 'Azure VMs', 'Azure Queue Storage', 'Git & GitHub', 'Vercel'] },
+  { id: 'hw', name: 'Hardware', color: 'var(--c5)', tools: ['Analog electronics', 'Circuit assembly'] },
+]
+
+
 // แก้ข้อความหรือเพิ่มทักษะได้ที่นี่ (วงจะจัดตำแหน่งให้เอง)
 const skills: Skill[] = [
-  { id: 'python', name: 'Python', short: 'Py', status: 'core',
+  { id: 'python', group: 'lang', name: 'Python', short: 'Py', status: 'core',
     text: 'My main language. It runs the OCR pipeline in my thesis and the NOC Assistant, and I used it with NumPy for coursework labs on genetic algorithms and fuzzy logic.',
     usedIn: ['OCR thesis', 'NOC Assistant', 'Course labs'],
     links: ['ocr', 'llm', 'linux'] },
-  { id: 'typescript', name: 'TypeScript', short: 'TS', status: 'core',
+  { id: 'typescript', group: 'lang', name: 'TypeScript', short: 'TS', status: 'core',
     text: 'Typed React components and props, used in this portfolio and in the Next.js court booking app.',
     usedIn: ['Court booking', 'This portfolio'],
     links: ['react', 'firebase'] },
-  { id: 'react', name: 'React & Next.js', short: 'Nx', status: 'core',
+  { id: 'react', group: 'web', name: 'React & Next.js', short: 'Nx', status: 'core',
     text: 'Next.js with API routes and Tailwind CSS in the court booking app (team of seven). React with Vite and React Router in this portfolio.',
     usedIn: ['Court booking', 'This portfolio'],
     links: ['typescript', 'firebase', 'git'] },
-  { id: 'flutter', name: 'Flutter', short: 'Fl', status: 'core',
+  { id: 'flutter', group: 'web', name: 'Flutter', short: 'Fl', status: 'core',
     text: 'MyMood is a Flutter app with a daily habit checklist, a monthly mood calendar and a journal with tag search.',
     usedIn: ['MyMood'],
     links: ['react'] },
-  { id: 'firebase', name: 'Firebase', short: 'Fb', status: 'core',
+  { id: 'firebase', group: 'web', name: 'Firebase', short: 'Fb', status: 'core',
     text: 'Firestore as the database of the court booking app, with transactions so two users cannot book the same slot.',
     usedIn: ['Court booking'],
     links: ['react', 'security'] },
-  { id: 'git', name: 'Git & Vercel', short: 'Git', status: 'core',
+  { id: 'git', group: 'sys', name: 'Git & Vercel', short: 'Git', status: 'core',
     text: 'Version control on GitHub with small commits, and continuous deployment on Vercel. Each branch of this portfolio gets its own preview URL.',
     usedIn: ['This portfolio'],
     links: ['react'] },
-  { id: 'ocr', name: 'OCR & ML', short: 'ML', status: 'core',
+  { id: 'ocr', group: 'ai', name: 'OCR & ML', short: 'ML', status: 'core',
     text: 'Fine-tuning Typhoon-OCR 1.5 (2B) with QLoRA to extract 14 fields from Thai tax invoices. Rule checks such as the tax ID checksum flag fields for review before saving.',
     usedIn: ['OCR thesis'],
     links: ['python', 'llm'] },
-  { id: 'llm', name: 'Local LLMs', short: 'AI', status: 'core',
+  { id: 'llm', group: 'ai', name: 'Local LLMs', short: 'AI', status: 'core',
     text: 'Running llama3.2:3b locally with Ollama. Function calling maps a Thai question to a server check, and the model explains the result in plain language.',
     usedIn: ['NOC Assistant'],
     links: ['python', 'ocr', 'linux'] },
-  { id: 'linux', name: 'Linux & Networking', short: 'Lx', status: 'core',
+  { id: 'linux', group: 'sys', name: 'Linux & Networking', short: 'Lx', status: 'core',
     text: 'Checking and configuring a Linux server over SSH with Paramiko: CPU, memory, interfaces, routes and connections. Also used two Linux VMs with Azure Queue Storage in a cloud course.',
     usedIn: ['NOC Assistant', 'Cloud course'],
     links: ['python', 'llm', 'security'] },
-  { id: 'security', name: 'Cybersecurity', short: 'Sec', status: 'learning',
+  { id: 'security', group: 'sys', name: 'Cybersecurity', short: 'Sec', status: 'learning',
     text: 'Building the fundamentals for a cybersecurity internship. Related work so far: PIN-protected admin access and transaction-based booking in the court booking app, and an on-premise design for the OCR thesis.',
     usedIn: ['Court booking', 'OCR thesis'],
     links: ['python', 'firebase', 'linux'] },
-  { id: 'electronics', name: 'Analog Electronics', short: 'El', status: 'core',
+  { id: 'electronics', group: 'hw', name: 'Analog Electronics', short: 'El', status: 'core',
     text: 'Built a power supply on my own for Electronic Practice I: assembled the boards, transformer and heatsinks, and fitted terminals, switches and indicators into a drilled metal enclosure.',
     usedIn: ['Electronic Practice I'],
     links: [] },
@@ -98,6 +110,11 @@ export default function Skills() {
         <AnimatedLetters text="Skills" />
       </h1>
       <p className="sk-sub">Hover a skill to see how I use it. Click to keep it open.</p>
+      <ul className="sk-legend" aria-label="Skill groups">
+        {groups.map((g) => (
+          <li key={g.id} style={{ '--g': g.color } as CSSProperties}>{g.name}</li>
+        ))}
+      </ul>
 
       <div className="sk-stage">
         <div className={`orbit ${current ? 'has-sel' : ''}`} onClick={clearAll}>
@@ -109,7 +126,7 @@ export default function Skills() {
               <div
                 className="slot"
                 key={s.id}
-                style={{ '--a': `${(360 / skills.length) * i}deg` } as CSSProperties}
+                style={{ '--a': `${(360 / skills.length) * i}deg`, '--g': groups.find((g) => g.id === s.group)?.color } as CSSProperties}
               >
                 <div className="unspin">
                   <button
@@ -177,6 +194,24 @@ export default function Skills() {
           </div>
         )}
       </div>
+
+      <section className="sk-section" aria-labelledby="toolbox-title">
+        <h2 id="toolbox-title" className="sk-h2">Toolbox</h2>
+        <p className="sk-note">Tools from my projects and coursework, by group.</p>
+        <div className="tb-grid">
+          {groups.map((g) => (
+            <div className="tb-box" key={g.id} style={{ '--g': g.color } as CSSProperties}>
+              <h3>{g.name}</h3>
+              <ul>
+                {g.tools.map((t) => (
+                  <li key={t}>{t}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
     </section>
   )
 }

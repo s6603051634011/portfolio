@@ -1,0 +1,28 @@
+/* ============ CURSOR สีธีม ============
+   ลูกศรเปลี่ยนสีตามธีม ไม่มีแอนิเมชัน (CSS ล้วน)
+   - ลูกศร: สี --accent มีเงาสี --accent-shadow
+   - ชี้สิ่งที่คลิกได้: วงกลมสี --accent มีจุดกลาง
+   จอสัมผัสไม่มี cursor อยู่แล้ว จึงไม่มีผลบนมือถือ
+   ใช้ !important เพราะหลายไฟล์ตั้ง cursor: pointer ไว้เอง ต้องทับให้หมด */
+
+/* night (ค่าเริ่มต้น) */
+:root {
+  --cur-arrow: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2228%22%20height%3D%2228%22%20viewBox%3D%220%200%2028%2028%22%3E%3Cpath%20d%3D%22M5%203%20L5%2022%20L10%2017.5%20L13.5%2025%20L17%2023.5%20L13.5%2016%20L20%2016%20Z%22%20fill%3D%22%238f7a00%22%20transform%3D%22translate%281.5%201.5%29%22/%3E%3Cpath%20d%3D%22M5%203%20L5%2022%20L10%2017.5%20L13.5%2025%20L17%2023.5%20L13.5%2016%20L20%2016%20Z%22%20fill%3D%22%23ffd700%22%20stroke%3D%22%23022638%22%20stroke-width%3D%221.5%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E");
+  --cur-hand: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2228%22%20height%3D%2228%22%20viewBox%3D%220%200%2028%2028%22%3E%3Ccircle%20cx%3D%2214%22%20cy%3D%2214%22%20r%3D%229%22%20fill%3D%22%23ffd700%22%20fill-opacity%3D%22.18%22%20stroke%3D%22%23ffd700%22%20stroke-width%3D%222%22/%3E%3Ccircle%20cx%3D%2214%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%234cc9f0%22/%3E%3C/svg%3E");
+}
+:root[data-theme='warm'] {
+  --cur-arrow: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2228%22%20height%3D%2228%22%20viewBox%3D%220%200%2028%2028%22%3E%3Cpath%20d%3D%22M5%203%20L5%2022%20L10%2017.5%20L13.5%2025%20L17%2023.5%20L13.5%2016%20L20%2016%20Z%22%20fill%3D%22%232b3fd6%22%20transform%3D%22translate%281.5%201.5%29%22/%3E%3Cpath%20d%3D%22M5%203%20L5%2022%20L10%2017.5%20L13.5%2025%20L17%2023.5%20L13.5%2016%20L20%2016%20Z%22%20fill%3D%22%23d93a50%22%20stroke%3D%22%23fffdf8%22%20stroke-width%3D%221.5%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E");
+  --cur-hand: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2228%22%20height%3D%2228%22%20viewBox%3D%220%200%2028%2028%22%3E%3Ccircle%20cx%3D%2214%22%20cy%3D%2214%22%20r%3D%229%22%20fill%3D%22%23d93a50%22%20fill-opacity%3D%22.18%22%20stroke%3D%22%23d93a50%22%20stroke-width%3D%222%22/%3E%3Ccircle%20cx%3D%2214%22%20cy%3D%2214%22%20r%3D%223%22%20fill%3D%22%232b3fd6%22/%3E%3C/svg%3E");
+}
+
+/* ตัวเลขหลังรูป = จุดที่คลิกจริง (ปลายลูกศร / กลางวงกลม) */
+html,
+.letter,
+:disabled { cursor: var(--cur-arrow) 6 4, auto !important; }
+
+a[href], button:not(:disabled), [role='button'], summary, label[for], select,
+.btn, .node, .hp-link { cursor: var(--cur-hand) 14 14, pointer !important; }
+
+/* ช่องพิมพ์ยังใช้ cursor พิมพ์ตามปกติ */
+input:not([type='button']):not([type='submit']):not([type='checkbox']):not([type='radio']),
+textarea { cursor: text !important; }
