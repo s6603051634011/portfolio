@@ -38,3 +38,41 @@
   .stk-body { grid-template-columns: 1fr; }
   .stk-head h2 { font-size: 18px; }
 }
+
+/* ============ ไฟวิ่งรอบขอบการ์ด ============
+   สีมาจากธีม: หัวไฟ = --accent, หางไฟ = --accent-shadow
+   ปรับได้: --run-speed (ความเร็ว), --run-width (ความหนาเส้นไฟ) */
+@property --run-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+.stk { --run-speed: 5s; --run-width: 4px; }
+.stk::before {
+  content: '';
+  position: absolute;
+  inset: -2px;                       /* ทับเส้นขอบเดิม 2px พอดี */
+  padding: var(--run-width);
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--run-angle),
+    transparent 0 72%,
+    var(--accent-shadow) 86%,
+    var(--accent) 98%,
+    transparent 100%
+  );
+  /* ตัดตรงกลางออก ให้เหลือแค่วงขอบ */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: stk-run var(--run-speed) linear infinite;
+  animation-delay: calc(var(--i) * -1.3s); /* แต่ละการ์ดไฟอยู่คนละตำแหน่ง ไม่วิ่งพร้อมกัน */
+  pointer-events: none;
+  z-index: 1;
+}
+@keyframes stk-run { to { --run-angle: 360deg; } }
+
+/* ผู้ใช้ที่ปิดแอนิเมชันในระบบ: ไม่วิ่ง */
+@media (prefers-reduced-motion: reduce) {
+  .stk::before { animation: none; }
+}
