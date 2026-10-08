@@ -151,7 +151,7 @@ export default function Projects() {
           <article
             className="stk"
             key={p.title}
-            style={{ '--i': i, '--ic': `var(--c${(i % 5) + 1})` } as CSSProperties}
+            style={{ '--i': i, '--ic': `var(--c${(i % 5) + 1})`, '--it': `var(--t${(i % 5) + 1})` } as CSSProperties}
           >
             <span className="stk-light" aria-hidden="true"><i /></span>
             <header className="stk-head">

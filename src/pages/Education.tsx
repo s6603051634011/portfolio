@@ -12,7 +12,8 @@ type Item = {
   status: 'present' | 'completed'
   period?: string // ใส่ช่วงเวลาเองได้ เช่น '2023 – Present'
   text: string
-  color: string // สีประจำการ์ด (จากธีม --c1..--c6)
+  color: number // สีประจำการ์ด 1-6 (= --c1..--c6 สำหรับพื้น/เส้น และ --t1..--t6 สำหรับตัวหนังสือ)
+  courses?: string[] // วิชาที่เกี่ยวข้อง (จาก CV)
   icon: 'cap' | 'book'
 }
 
@@ -24,7 +25,15 @@ const education: Item[] = [
     status: 'present',
     period: 'Electronics Engineering Technology (Computer) · 4th year',
     text: 'Specializing in Computer Engineering, with hands-on software projects and a focus on cybersecurity.',
-    color: 'var(--c2)',
+    color: 2,
+    courses: [
+      'Cybersecurity',
+      'Computer Network Systems & Data Communication',
+      'Operating System',
+      'Linux Operating Systems & Administration',
+      'Web Application Development',
+      'Database & Data Technology',
+    ],
     icon: 'cap',
   },
   {
@@ -33,7 +42,7 @@ const education: Item[] = [
     status: 'completed',
     period: 'Science-Mathematics Program',
     text: 'Focused on advanced mathematics and science, with a strong interest in computer programming and technology.',
-    color: 'var(--c3)',
+    color: 3,
     icon: 'book',
   },
 ]
@@ -121,7 +130,7 @@ export default function Education() {
       <div className="timeline">
         <span className="timeline-fill" aria-hidden="true" />
         {education.map((it) => (
-          <div className="t-item" key={it.title} style={{ '--ic': it.color } as CSSProperties}>
+          <div className="t-item" key={it.title} style={{ '--ic': `var(--c${it.color})`, '--it': `var(--t${it.color})` } as CSSProperties}>
             <span className="t-dot" aria-hidden="true" />
             <article className="t-card" onPointerMove={tilt} onPointerLeave={untilt}>
               <div className="t-icon">{ICONS[it.icon]}</div>
@@ -133,6 +142,14 @@ export default function Education() {
                 <p className="t-place">{it.place}</p>
                 {it.period && <p className="t-period">{it.period}</p>}
                 <p className="t-text">{it.text}</p>
+                {it.courses && (
+                  <div className="t-courses">
+                    <p className="t-courses-title">RELEVANT COURSEWORK</p>
+                    <ul>
+                      {it.courses.map((c) => <li key={c}>{c}</li>)}
+                    </ul>
+                  </div>
+                )}
               </div>
             </article>
           </div>
@@ -144,7 +161,7 @@ export default function Education() {
         <div className="rb-track">
           {[0, 1].map((copy) =>
             ribbon.map((w, i) => (
-              <span key={`${copy}-${i}`} style={{ '--rc': `var(--c${(i % 6) + 1})` } as CSSProperties}>
+              <span key={`${copy}-${i}`} style={{ '--rc': `var(--t${(i % 6) + 1})` } as CSSProperties}>
                 {w}
               </span>
             ))

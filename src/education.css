@@ -64,8 +64,14 @@
 @keyframes edu-blink { 50% { opacity: .2; } }
 .edu .badge.done { background: none; color: var(--muted); border: 1px solid var(--line); }
 .edu .t-place { color: var(--text-soft); margin: 6px 0 0; font-size: 14px; }
-.edu .t-period { color: var(--ic); margin: 8px 0 0; font-size: 12px; font-weight: 700; letter-spacing: .08em; }
+.edu .t-period { color: var(--it, var(--ic)); margin: 8px 0 0; font-size: 12px; font-weight: 700; letter-spacing: .08em; }
 .edu .t-text { color: var(--text-soft); margin: 12px 0 0; font-size: 14px; line-height: 1.65; }
+
+/* วิชาที่เกี่ยวข้อง */
+.edu .t-courses { margin-top: 16px; border-top: 1px dashed var(--line); padding-top: 12px; }
+.edu .t-courses-title { margin: 0 0 8px; font-size: 11px; font-weight: 700; letter-spacing: .14em; color: var(--it, var(--muted)); }
+.edu .t-courses ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.edu .t-courses li { font-size: 12px; color: var(--surface-text); border: 1.5px solid var(--ic); border-radius: 999px; padding: 3px 10px; }
 
 /* ---------- แถบตัวหนังสือวิ่ง (กว้างเต็มจอ ตัดส่วนที่เอียงล้นออก) ---------- */
 .ribbon-wrap { width: 100vw; margin: 40px 0 0 calc(50% - 50vw); padding-block: 24px; overflow: hidden; }

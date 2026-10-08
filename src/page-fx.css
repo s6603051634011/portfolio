@@ -1,3 +1,13 @@
+/* ============ สีสำหรับตัวหนังสือเล็ก ============
+   --c1..--c6 สดแต่บางสีจางบนพื้นครีม (ส้ม ชมพู ฟ้า เขียว) จึงมี --t1..--t6 ที่เข้มขึ้น
+   ให้อ่านง่ายตามเกณฑ์ (contrast อย่างน้อย 4.5:1) ใช้กับตัวหนังสือเล็กและกรอบ focus */
+:root { /* ธีม night: สีเดิมอ่านง่ายอยู่แล้ว ยกเว้นชมพูบนการ์ด */
+  --t1: var(--c1); --t2: var(--c2); --t3: #ff9cbb; --t4: var(--c4); --t5: var(--c5); --t6: var(--c6);
+}
+:root[data-theme='warm'] {
+  --t1: #c9374a; --t2: #2b3fd6; --t3: #1c7744; --t4: #ad5115; --t5: #a54f68; --t6: #2a6e8e;
+}
+
 /* ============ ของตกแต่งที่ใช้ร่วมกันทุกหน้า ============ */
 /* หน้าใดมี <PageShapes> ให้ใส่คลาส fx-page ที่ section ของหน้า */
 .fx-page { position: relative; }
@@ -56,13 +66,13 @@
 .about .hp:nth-of-type(odd) .hp-link { border-bottom-color: var(--c2); }
 .about .hp:nth-of-type(even) .hp-link { border-bottom-color: var(--c3); }
 .about .hp:nth-of-type(odd) .hp-link:hover { color: var(--c2); }
-.about .hp:nth-of-type(even) .hp-link:hover { color: var(--c3); }
+.about .hp:nth-of-type(even) .hp-link:hover { color: var(--t3); }
 
 /* Contact: แต่ละช่องมีสีกรอบตอนพิมพ์ต่างกัน */
-.contact input[name='name']:focus { outline-color: var(--c2); }
-.contact input[name='email']:focus { outline-color: var(--c3); }
-.contact input[name='subject']:focus { outline-color: var(--c4); }
-.contact textarea:focus { outline-color: var(--c5); }
+.contact input[name='name']:focus { outline-color: var(--t2); }
+.contact input[name='email']:focus { outline-color: var(--t3); }
+.contact input[name='subject']:focus { outline-color: var(--t4); }
+.contact textarea:focus { outline-color: var(--t5); }
 .contact input:focus, .contact textarea:focus { outline-width: 3px; }
 .map-wrap { width: 100%; }
 .map-wrap .map { border: 2px solid var(--line); border-radius: 18px; box-shadow: 8px 8px 0 var(--c2); }
@@ -81,7 +91,7 @@
   background: none; border: 2px solid var(--line); border-radius: 999px; padding: 6px 14px;
   transition: border-color .2s, color .2s;
 }
-.direct-btn:hover, .direct-btn:focus-visible { border-color: var(--c3); color: var(--c3); outline: none; }
+.direct-btn:hover, .direct-btn:focus-visible { border-color: var(--t3); color: var(--t3); outline: none; }
 
 /* แก้ล้นจอบนมือถือ */
 @media (max-width: 820px) {

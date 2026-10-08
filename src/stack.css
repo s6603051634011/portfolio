@@ -12,14 +12,14 @@
 .stk-no { font-family: var(--font-display); font-size: 28px; line-height: 1; color: var(--ic, var(--text)); }
 .stk-head h2 {
   flex: 1; margin: 0; font-family: var(--font-display); font-weight: 400;
-  font-size: clamp(18px, 2vw, 24px); line-height: 1.2; color: color-mix(in srgb, var(--ic, var(--accent)) 82%, var(--text));
+  font-size: clamp(18px, 2vw, 24px); line-height: 1.2; color: var(--it, var(--accent));
 }
 .stk-links { display: flex; gap: 8px; }
 .stk-pill {
   border: 2px solid var(--line); border-radius: 999px; padding: 6px 16px; color: var(--text);
   font-size: 11px; font-weight: 700; letter-spacing: .12em; text-decoration: none; transition: border-color .2s, color .2s;
 }
-.stk-pill:hover, .stk-pill:focus-visible { border-color: var(--ic, var(--accent)); color: var(--ic, var(--accent)); outline: none; }
+.stk-pill:hover, .stk-pill:focus-visible { border-color: var(--ic, var(--accent)); color: var(--it, var(--accent)); outline: none; }
 
 .stk-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
 .stk-body.one { grid-template-columns: 1fr; }
