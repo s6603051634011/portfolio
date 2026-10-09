@@ -18,7 +18,7 @@ const SHAPES: Shape[] = [
 
 // บทบาทที่พิมพ์วนทีละอัน แต่ละอันมีสีของตัวเอง
 const ROLES = [
-  { text: 'Electronics Engineering student (Computer)', color: 'var(--t2)' },
+  { text: 'Electronics Engineering (Computer) student', color: 'var(--t2)' },
   { text: 'Security intern candidate', color: 'var(--t1)' },
   { text: 'Full-stack developer', color: 'var(--t3)' },
 ]

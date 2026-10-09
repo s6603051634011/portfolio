@@ -24,7 +24,7 @@ const education: Item[] = [
     place: "King Mongkut's University of Technology North Bangkok (KMUTNB), College of Industrial Technology",
     status: 'present',
     period: 'Electronics Engineering Technology (Computer) · 4th year',
-    text: 'Specializing in Computer Engineering, with hands-on software projects and a focus on cybersecurity.',
+    text: 'Studying Electronics Engineering (Computer), with hands-on software projects and a focus on security.',
     color: 2,
     courses: [
       'Cybersecurity',
@@ -48,7 +48,7 @@ const education: Item[] = [
 ]
 
 // คำที่วิ่งในแถบด้านล่าง (ดึงจากข้อมูลด้านบน)
-const ribbon = ['KMUTNB', 'Computer Engineering', 'Cybersecurity', 'St.Mary School', 'Science-Mathematics']
+const ribbon = ['KMUTNB', 'Electronics Engineering', 'Security', 'St.Mary School', 'Science-Mathematics']
 
 const Cap = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

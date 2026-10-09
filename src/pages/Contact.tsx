@@ -56,7 +56,7 @@ export default function Contact() {
       <PageShapes shapes={SHAPES} />
       <div className="contact">
         <h1 className="title page-title">
-          <AnimatedLetters text="Contact me" colorful />
+          <AnimatedLetters text="Let's get in touch!" colorful />
         </h1>
         <p data-intro>
           I’m looking for a security internship, in cybersecurity or network security. Send a message and I’ll
