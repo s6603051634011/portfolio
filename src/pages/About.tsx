@@ -25,8 +25,8 @@ export default function About() {
         </h1>
 
         <p data-intro>
-          I’m Phimlaphat, a 4th-year Electronics and Computer Engineering student at KMUTNB,
-          specializing in Computer Engineering.
+          I’m Phimlaphat, a 4th-year Electronics Engineering (Computer) student  at KMUTNB,
+          where I work across hardware, embedded systems, and software.
         </p>
         <p data-intro>
           I learn best by reading a topic until it makes sense and then practicing with

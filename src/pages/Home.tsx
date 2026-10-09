@@ -18,7 +18,7 @@ const SHAPES: Shape[] = [
 
 // บทบาทที่พิมพ์วนทีละอัน แต่ละอันมีสีของตัวเอง
 const ROLES = [
-  { text: 'Computer Engineering student', color: 'var(--t2)' },
+  { text: 'Electronics Engineering student (Computer)', color: 'var(--t2)' },
   { text: 'Security intern candidate', color: 'var(--t1)' },
   { text: 'Full-stack developer', color: 'var(--t3)' },
 ]
@@ -39,7 +39,7 @@ export default function Home() {
           <AnimatedLetters text="I’m " />
           <AnimatedLetters text="Phimlaphat" className="accent" colorful />
           <br />
-          <AnimatedLetters text="developer." className="sub" />
+          <AnimatedLetters text="developer" className="sub" />
         </h1>
         <div data-intro>
           <Typewriter items={ROLES} className="role" />
